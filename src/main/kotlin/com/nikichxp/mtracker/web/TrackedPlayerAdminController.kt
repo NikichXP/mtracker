@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
-/**
- * CRUD for [TrackedPlayer] (friends and/or manual main+alt groupings tracked outside of plain
- * guild roster sync). Gated by [AdminAuthFilter] - see `MTRACKER_ADMIN_TOKEN`.
- */
 @RestController
 @RequestMapping("/api/v1/admin/tracked-players")
 class TrackedPlayerAdminController(private val repository: TrackedPlayerRepository) {

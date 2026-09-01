@@ -9,10 +9,6 @@ import org.springframework.web.server.WebFilterChain
 import reactor.core.publisher.Mono
 import java.security.MessageDigest
 
-/**
- * Guards every request under [pathPrefix] with a shared-secret bearer token. Fails closed: if
- * [expectedToken] is blank, every matching request is rejected rather than silently left open.
- */
 abstract class TokenGuardWebFilter(private val pathPrefix: String) : WebFilter {
 
     private val log = LoggerFactory.getLogger(javaClass)

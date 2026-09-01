@@ -5,7 +5,6 @@ import com.nikichxp.mtracker.domain.TrackedPlayerRepository
 import com.nikichxp.mtracker.raiderio.RaiderIoClient
 import org.springframework.stereotype.Component
 
-/** Resolved set of tracked characters, tagged with why they're tracked. */
 data class ResolvedRoster(
     val guildMemberKeys: Set<String>,
     val friendKeys: Set<String>,
@@ -14,11 +13,6 @@ data class ResolvedRoster(
     val allKeys: Set<String> get() = guildMemberKeys + friendKeys + altKeys
 }
 
-/**
- * Builds the full set of character keys to sync: the live Raider.io roster of every
- * [com.nikichxp.mtracker.domain.TrackedGuild], plus every character referenced by a
- * [com.nikichxp.mtracker.domain.TrackedPlayer] (main + alts).
- */
 @Component
 class RosterResolver(
     private val raiderIoClient: RaiderIoClient,

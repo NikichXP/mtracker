@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
-/**
- * CRUD for [TrackedGuild] (which guilds' rosters get pulled from Raider.io). Gated by
- * [AdminAuthFilter] - see `MTRACKER_ADMIN_TOKEN`.
- */
 @RestController
 @RequestMapping("/api/v1/admin/guilds")
 class GuildAdminController(private val repository: TrackedGuildRepository) {

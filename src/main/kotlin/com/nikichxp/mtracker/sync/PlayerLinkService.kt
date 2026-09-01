@@ -5,15 +5,6 @@ import com.nikichxp.mtracker.domain.PlayerRepository
 import com.nikichxp.mtracker.domain.TrackedPlayerRepository
 import org.springframework.stereotype.Component
 
-/**
- * Groups characters into [Player]s (main + alts).
- *
- * IMPORTANT LIMITATION: Raider.io's public API has no field linking a character to its
- * alts, so this is entirely driven by [com.nikichxp.mtracker.domain.TrackedPlayer] entries
- * (managed via [com.nikichxp.mtracker.web.TrackedPlayerAdminController]). Any character not
- * explicitly listed there is treated as its own standalone main. This is not a bug - it's a
- * hard limit of the upstream API - so don't expect automatic alt discovery here.
- */
 @Component
 class PlayerLinkService(
     private val rosterResolver: RosterResolver,

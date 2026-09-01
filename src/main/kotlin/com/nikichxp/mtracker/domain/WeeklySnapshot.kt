@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.index.CompoundIndex
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 
-/** Per-character, per-EU-reset-week snapshot of Mythic+ progress, used to build weekly leaderboards. */
 @Document(collection = "weekly_snapshots")
 @CompoundIndex(def = "{'weekKey': 1, 'characterKey': 1}", unique = true)
 data class WeeklySnapshot(

@@ -1,0 +1,55 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState
+
+spring:
+  application:
+    name: mtracker
+  config:
+    import: "optional:file:.env[.properties]"
+  data:
+    mongodb:
+      # NOTE: spring.data.mongodb.database is ignored whenever `uri` is set (Spring Boot always
+      # takes the database from the URI's path in that case), so the target database must be
+      # part of MONGODB_URI itself - see the production connection strings in
+      # infra-scripts/manifests/mtracker/ for the pattern this mirrors.
+      uri: ${MONGODB_URI:mongodb://localhost:27017/mtracker_db}
+      database: ${MONGODB_DATABASE:mtracker_db}
+      auto-index-creation: true
+
+mtracker:
+  # Single-region deployment for now; tracked guilds/players live in MongoDB (see
+  # TrackedGuild/TrackedPlayer + the /api/v1/admin/** CRUD API), not static config.
+  region: ${MTRACKER_REGION:eu}
+  sync:
+    interval-hours: ${MTRACKER_SYNC_INTERVAL_HOURS:6}
+    request-delay-ms: ${MTRACKER_SYNC_REQUEST_DELAY_MS:250}
+  raiderio:
+    base-url: ${RAIDERIO_BASE_URL:https://raider.io/api/v1}
+  s2s:
+    # Shared secret for other in-house services (e.g. tg-bot) calling /api/v1/s2s/**.
+    # Left blank by default: the S2sAuthFilter rejects every /api/v1/s2s/** request while it's blank.
+    token: ${MTRACKER_S2S_TOKEN:}
+  admin:
+    # Shared secret for the /api/v1/admin/** CRUD API (managing tracked guilds/players).
+    # Left blank by default: the AdminAuthFilter rejects every /api/v1/admin/** request while it's blank.
+    token: ${MTRACKER_ADMIN_TOKEN:}
+
+logging:
+  level:
+    com.nikichxp.mtracker: ${LOG_LEVEL_MTRACKER:INFO}
+    org.mongodb.driver: ${LOG_LEVEL_MONGO_DRIVER:WARN}

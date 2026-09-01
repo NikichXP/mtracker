@@ -1,0 +1,80 @@
+name: Frontend Build and Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yaml"
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-build-deploy
+  cancel-in-progress: false
+
+env:
+  REGISTRY: kraken.nikichxp.xyz
+  IMAGE: kraken.nikichxp.xyz/mtracker-ui
+  NAMESPACE: mtracker
+  API_BASE_URL: https://mtracker.nikichxp.xyz/api
+
+jobs:
+  build-and-deploy:
+    # "mtracker-runner" is the gha-runner-scale-set (runnerScaleSetName) registered
+    # against this repo only, configured in
+    # infra-scripts/manifests/github-runner/21-github-runner-scale-set-mtracker-application.yaml,
+    # pinned to the berry5 node. Must match exactly, or jobs stay queued forever.
+    runs-on: mtracker-runner
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          file: frontend/Dockerfile
+          push: true
+          build-args: |
+            VITE_API_BASE_URL=${{ env.API_BASE_URL }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          provenance: false
+        timeout-minutes: 30
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Write kubeconfig
+        shell: bash
+        env:
+          KUBECONFIG_FILE: ${{ github.workspace }}/.kube/config
+        run: |
+          mkdir -p "$(dirname "$KUBECONFIG_FILE")"
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d -i > "$KUBECONFIG_FILE"
+          chmod 600 "$KUBECONFIG_FILE"
+          echo "KUBECONFIG=$KUBECONFIG_FILE" >> "$GITHUB_ENV"
+
+      - name: Roll out new image
+        shell: bash
+        run: |
+          set -euo pipefail
+          kubectl -n "$NAMESPACE" rollout restart deployment/mtracker-ui
+          kubectl -n "$NAMESPACE" rollout status deployment/mtracker-ui --timeout=300s
+
+      - name: Cleanup kubeconfig
+        if: always()
+        shell: bash
+        run: rm -f "${{ github.workspace }}/.kube/config"

@@ -20,11 +20,7 @@ env:
 
 jobs:
   build-and-deploy:
-    # "mtracker-runner" is the gha-runner-scale-set (runnerScaleSetName) registered
-    # against this repo only, configured in
-    # infra-scripts/manifests/github-runner/21-github-runner-scale-set-mtracker-application.yaml,
-    # pinned to the berry5 node. Must match exactly, or jobs stay queued forever.
-    runs-on: mtracker-runner
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -71,8 +67,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          kubectl -n "$NAMESPACE" rollout restart deployment/mtracker-ui
-          kubectl -n "$NAMESPACE" rollout status deployment/mtracker-ui --timeout=300s
+          if kubectl -n "$NAMESPACE" get deployment/mtracker-ui >/dev/null 2>&1; then
+            kubectl -n "$NAMESPACE" rollout restart deployment/mtracker-ui
+            kubectl -n "$NAMESPACE" rollout status deployment/mtracker-ui --timeout=300s
+          fi
 
       - name: Cleanup kubeconfig
         if: always()

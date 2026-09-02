@@ -9,12 +9,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
-/**
- * Thin wrapper around the public Raider.io REST API. Every call blocks (this service has no
- * need for reactive backpressure) and is spaced out via [RaiderIoRateLimiter] to stay polite;
- * lookup failures (character/guild not found, upstream errors) are logged and degrade to
- * null/empty rather than blowing up the whole sync.
- */
 @Component
 class RaiderIoClient(
     private val webClient: WebClient,

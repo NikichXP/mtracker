@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.time.measureTime
 
-/** Coordinates a full sync run: refresh every tracked character, then rebuild player groupings. */
 @Component
 class SyncOrchestrator(
     private val rosterResolver: RosterResolver,

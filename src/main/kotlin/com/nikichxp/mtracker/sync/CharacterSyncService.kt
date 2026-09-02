@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.time.Instant
 
-/** Fetches a single character from Raider.io and persists it plus its weekly snapshot. */
 @Component
 class CharacterSyncService(
     private val raiderIoClient: RaiderIoClient,

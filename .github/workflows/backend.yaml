@@ -2,7 +2,7 @@ name: Backend Build and Deploy
 
 on:
   push:
-    branches: [main]
+    branches: master
     paths:
       - "src/**"
       - "build.gradle.kts"

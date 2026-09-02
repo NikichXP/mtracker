@@ -1,0 +1,46 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState
+
+spring:
+  application:
+    name: mtracker
+  config:
+    import: "optional:file:.env[.properties]"
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/mtracker_db}
+    database: ${MONGODB_DATABASE:mtracker_db}
+  data:
+    mongodb:
+      auto-index-creation: true
+
+mtracker:
+  region: ${MTRACKER_REGION:eu}
+  sync:
+    interval-hours: ${MTRACKER_SYNC_INTERVAL_HOURS:6}
+    request-delay-ms: ${MTRACKER_SYNC_REQUEST_DELAY_MS:250}
+  raiderio:
+    base-url: ${RAIDERIO_BASE_URL:https://raider.io/api/v1}
+  s2s:
+    token: ${MTRACKER_S2S_TOKEN:}
+  admin:
+    token: ${MTRACKER_ADMIN_TOKEN:}
+
+logging:
+  level:
+    com.nikichxp.mtracker: ${LOG_LEVEL_MTRACKER:INFO}
+    org.mongodb.driver: ${LOG_LEVEL_MONGO_DRIVER:WARN}

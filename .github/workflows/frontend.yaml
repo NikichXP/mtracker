@@ -1,0 +1,78 @@
+name: Frontend Build and Deploy
+
+on:
+  push:
+    branches: master
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend.yaml"
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-build-deploy
+  cancel-in-progress: false
+
+env:
+  REGISTRY: kraken.nikichxp.xyz
+  IMAGE: kraken.nikichxp.xyz/mtracker-ui
+  NAMESPACE: mtracker
+  API_BASE_URL: https://mtracker.nikichxp.xyz/api
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          file: frontend/Dockerfile
+          push: true
+          build-args: |
+            VITE_API_BASE_URL=${{ env.API_BASE_URL }}
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          provenance: false
+        timeout-minutes: 30
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Write kubeconfig
+        shell: bash
+        env:
+          KUBECONFIG_FILE: ${{ github.workspace }}/.kube/config
+        run: |
+          mkdir -p "$(dirname "$KUBECONFIG_FILE")"
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d -i > "$KUBECONFIG_FILE"
+          chmod 600 "$KUBECONFIG_FILE"
+          echo "KUBECONFIG=$KUBECONFIG_FILE" >> "$GITHUB_ENV"
+
+      - name: Roll out new image
+        shell: bash
+        run: |
+          set -euo pipefail
+          if kubectl -n "$NAMESPACE" get deployment/mtracker-ui >/dev/null 2>&1; then
+            kubectl -n "$NAMESPACE" rollout restart deployment/mtracker-ui
+            kubectl -n "$NAMESPACE" rollout status deployment/mtracker-ui --timeout=300s
+          fi
+
+      - name: Cleanup kubeconfig
+        if: always()
+        shell: bash
+        run: rm -f "${{ github.workspace }}/.kube/config"

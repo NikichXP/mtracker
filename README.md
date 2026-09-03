@@ -126,9 +126,8 @@ curl -X POST localhost:8080/api/v1/admin/guilds \
 ## CI/CD и инфраструктура
 
 Манифесты k3s лежат в отдельном репозитории `infra-scripts/manifests/mtracker/` (namespace `mtracker`,
-Traefik Ingress + cert-manager, домен `mtracker.nikichxp.xyz`). MongoDB — общий инстанс с
-`okx-collector`, отдельная база `mtracker_db` (см. `infra-scripts/manifests/mongodb/09-mtracker-user-secret.yaml`
-и `41-create-mtracker-user-job.yaml`).
+Traefik Ingress + cert-manager, домен `mtracker.nikichxp.xyz`). PostgreSQL — собственный инстанс
+в namespace `mtracker` (см. `infra-scripts/manifests/mtracker/15-postgres-pvc.yaml` и `22-postgres.yaml`).
 
 ⚠️ Перед применением манифестов нужно заменить плейсхолдерные пароли на реальные (гильдии/персонажи
 больше не часть манифестов — их нужно завести через Admin API после деплоя, см. выше) — плейсхолдеры

@@ -16,7 +16,7 @@ env:
   REGISTRY: kraken.nikichxp.xyz
   IMAGE: kraken.nikichxp.xyz/mtracker-ui
   NAMESPACE: mtracker
-  API_BASE_URL: https://mtracker.nikichxp.xyz/api
+  API_BASE_URL: https://mtracker.nikichxp.xyz
 
 jobs:
   build-and-deploy:

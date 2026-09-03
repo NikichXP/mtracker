@@ -47,7 +47,7 @@ It defaults to an empty string (same-origin relative requests), which works in p
 because the Ingress for `mtracker.nikichxp.xyz` routes the `/api` path prefix to `mtracker-service`
 and everything else to `mtracker-ui` (see `infra-scripts/manifests/mtracker/30-ingress.yaml`). The
 CI pipeline (`.github/workflows/frontend.yaml`) still passes it explicitly as
-`https://mtracker.nikichxp.xyz/api` for clarity. For local dev, `vite.config.ts` proxies `/api`
+`https://mtracker.nikichxp.xyz` for clarity. For local dev, `vite.config.ts` proxies `/api`
 to `http://localhost:8080` instead, so no env var is needed against a locally running backend.
 
 ## Development

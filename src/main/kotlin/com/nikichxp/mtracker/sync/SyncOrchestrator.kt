@@ -38,7 +38,6 @@ class SyncOrchestrator(
     private suspend fun syncAll(keys: Set<String>, source: CharacterSource) {
         for (key in keys) {
             characterSyncService.syncCharacter(key, source)
-            delay(EventLimiter.DEFAULT_MIN_INTERVAL_MS)
         }
     }
 }

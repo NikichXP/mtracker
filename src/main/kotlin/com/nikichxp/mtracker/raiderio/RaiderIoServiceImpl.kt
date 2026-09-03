@@ -6,8 +6,10 @@ import com.nikichxp.mtracker.raiderio.dto.GuildMemberDto
 import com.nikichxp.mtracker.raiderio.dto.GuildProfileDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -22,7 +24,7 @@ class RaiderIoServiceImpl(
 ) : IRaiderIoService {
 
     private val log = LoggerFactory.getLogger(javaClass)
-    private val region = props.region
+    private val region get() = props.region
 
     private val characterFields = listOf(
         "gear",
@@ -35,9 +37,8 @@ class RaiderIoServiceImpl(
     ).joinToString(",")
 
     override suspend fun fetchCharacterProfile(name: String, realm: String): CharacterProfileDto? {
-        limiter.acquire()
         return try {
-            val response = httpClient.get("${props.raiderio.baseUrl.trimEnd('/')}/characters/profile") {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/characters/profile") {
                 parameter("region", region)
                 parameter("realm", realm)
                 parameter("name", name)
@@ -46,7 +47,13 @@ class RaiderIoServiceImpl(
             if (response.status.isSuccess()) {
                 response.body<CharacterProfileDto>()
             } else {
-                log.warn("Failed to fetch character profile for {}-{}: {} {}", name, realm, response.status.value, response.status.description)
+                log.warn(
+                    "Failed to fetch character profile for {}-{}: {} {}",
+                    name,
+                    realm,
+                    response.status.value,
+                    response.status.description
+                )
                 null
             }
         } catch (e: Exception) {
@@ -56,9 +63,9 @@ class RaiderIoServiceImpl(
     }
 
     override suspend fun fetchGuildRoster(guildName: String, guildRealm: String): List<GuildMemberDto> {
-        limiter.acquire()
+
         return try {
-            val response = httpClient.get("${props.raiderio.baseUrl.trimEnd('/')}/guilds/profile") {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/guilds/profile") {
                 parameter("region", region)
                 parameter("realm", guildRealm)
                 parameter("name", guildName)
@@ -67,12 +74,28 @@ class RaiderIoServiceImpl(
             if (response.status.isSuccess()) {
                 response.body<GuildProfileDto>().members
             } else {
-                log.warn("Failed to fetch guild roster for {}-{}: {} {}", guildName, guildRealm, response.status.value, response.status.description)
+                log.warn(
+                    "Failed to fetch guild roster for {}-{}: {} {}",
+                    guildName,
+                    guildRealm,
+                    response.status.value,
+                    response.status.description
+                )
                 emptyList()
             }
         } catch (e: Exception) {
             log.warn("Failed to fetch guild roster for {}-{}: {}", guildName, guildRealm, e.message)
             emptyList()
         }
+    }
+
+    private suspend fun invokeCall(url: String, block: HttpRequestBuilder.() -> Unit): HttpResponse {
+        return eventLimiter.invoke(SYNC_KEY) {
+            httpClient.get(url, block)
+        }
+    }
+
+    companion object {
+        private const val SYNC_KEY = "raider.io"
     }
 }

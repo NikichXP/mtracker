@@ -12,9 +12,11 @@ import com.nikichxp.mtracker.web.dto.PlayerDetailDto
 import com.nikichxp.mtracker.web.dto.PlayerOverviewDto
 import com.nikichxp.mtracker.web.dto.WeeklyPlayerStatsDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /** Builds the read-only DTOs served by [StatsController] out of the stored domain data. */
 @Service
+@Transactional(readOnly = true)
 class StatsService(
     private val playerRepository: PlayerRepository,
     private val characterRepository: CharacterRepository,
@@ -64,7 +66,7 @@ class StatsService(
     }
 
     fun availableWeeks(): List<String> =
-        weeklySnapshotRepository.findAll().map { it.weekKey }.distinct().sortedDescending()
+        weeklySnapshotRepository.findDistinctWeekKeys()
 
     private fun toOverview(player: Player, charactersByKey: Map<String, Character>): PlayerOverviewDto {
         val characters = player.characterKeys.mapNotNull { charactersByKey[it] }

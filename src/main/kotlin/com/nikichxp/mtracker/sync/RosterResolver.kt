@@ -2,7 +2,7 @@ package com.nikichxp.mtracker.sync
 
 import com.nikichxp.mtracker.domain.TrackedGuildRepository
 import com.nikichxp.mtracker.domain.TrackedPlayerRepository
-import com.nikichxp.mtracker.raiderio.RaiderIoClient
+import com.nikichxp.mtracker.raiderio.IRaiderIoService
 import org.springframework.stereotype.Component
 
 data class ResolvedRoster(
@@ -15,21 +15,21 @@ data class ResolvedRoster(
 
 @Component
 class RosterResolver(
-    private val raiderIoClient: RaiderIoClient,
+    private val raiderIoService: IRaiderIoService,
     private val trackedGuildRepository: TrackedGuildRepository,
     private val trackedPlayerRepository: TrackedPlayerRepository,
 ) {
 
-    fun resolve(): ResolvedRoster {
-        val guildMembers = trackedGuildRepository.findAll()
-            .flatMap { guild ->
-                raiderIoClient.fetchGuildRoster(guild.name, guild.realm).mapNotNull { member ->
-                    val name = member.character?.name ?: return@mapNotNull null
+    suspend fun resolve(): ResolvedRoster {
+        val guildMembers = buildSet {
+            for (guild in trackedGuildRepository.findAll()) {
+                for (member in raiderIoService.fetchGuildRoster(guild.name, guild.realm)) {
+                    val name = member.character?.name ?: continue
                     val realm = member.character.realm ?: guild.realm
-                    characterKey(name, realm)
+                    add(characterKey(name, realm))
                 }
             }
-            .toSet()
+        }
 
         val trackedPlayers = trackedPlayerRepository.findAll()
 

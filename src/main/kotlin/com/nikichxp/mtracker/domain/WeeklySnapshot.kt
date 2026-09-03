@@ -1,18 +1,26 @@
 package com.nikichxp.mtracker.domain
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.CompoundIndex
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 import java.time.Instant
 
-@Document(collection = "weekly_snapshots")
-@CompoundIndex(def = "{'weekKey': 1, 'characterKey': 1}", unique = true)
+@Entity
+@Table(
+    name = "weekly_snapshots",
+    uniqueConstraints = [UniqueConstraint(name = "uk_weekly_snapshot", columnNames = ["weekKey", "characterKey"])]
+)
 data class WeeklySnapshot(
-    @Id val id: String? = null,
-    val weekKey: String,
-    val characterKey: String,
-    val mythicPlusScore: Double?,
-    val weeklyRunsCount: Int,
-    val weeklyHighestLevel: Int,
-    val capturedAt: Instant,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+    val weekKey: String = "",
+    val characterKey: String = "",
+    val mythicPlusScore: Double? = null,
+    val weeklyRunsCount: Int = 0,
+    val weeklyHighestLevel: Int = 0,
+    val capturedAt: Instant = Instant.now(),
 )

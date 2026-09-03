@@ -4,15 +4,17 @@ import com.nikichxp.mtracker.domain.Player
 import com.nikichxp.mtracker.domain.PlayerRepository
 import com.nikichxp.mtracker.domain.TrackedPlayerRepository
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
+@Transactional
 class PlayerLinkService(
     private val rosterResolver: RosterResolver,
     private val playerRepository: PlayerRepository,
     private val trackedPlayerRepository: TrackedPlayerRepository,
 ) {
 
-    fun rebuildPlayers() {
+    suspend fun rebuildPlayers() {
         val roster = rosterResolver.resolve()
         val linkedKeys = mutableSetOf<String>()
 

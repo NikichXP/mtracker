@@ -8,6 +8,7 @@ build/
 out/
 .env
 .env.*.local
+.kotlin/
 
 # Frontend (frontend/)
 frontend/node_modules/

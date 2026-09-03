@@ -1,12 +1,13 @@
 package com.nikichxp.mtracker.web.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 
 data class PlayerOverviewDto(
     val playerKey: String,
     val displayName: String,
-    val isFriend: Boolean,
-    val isGuildMember: Boolean,
+    @get:JsonProperty("isFriend") @param:JsonProperty("isFriend") val isFriend: Boolean,
+    @get:JsonProperty("isGuildMember") @param:JsonProperty("isGuildMember") val isGuildMember: Boolean,
     val totalScore: Double,
     val weeklyRunsCount: Int,
     val weeklyHighestLevel: Int,
@@ -34,7 +35,7 @@ data class DungeonRunDto(
     val dungeonName: String,
     val mythicLevel: Int,
     val score: Double,
-    val timed: Boolean,
+    @JsonProperty("timed") val timed: Boolean,
     val completedAt: Instant?,
 )
 

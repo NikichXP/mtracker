@@ -2,6 +2,8 @@ package com.nikichxp.mtracker.sync
 
 import com.nikichxp.mtracker.config.MtrackerProperties
 import com.nikichxp.mtracker.domain.CharacterSource
+import com.nikichxp.mtracker.raiderio.EventLimiter
+import kotlinx.coroutines.delay
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import kotlin.time.measureTime
@@ -15,7 +17,7 @@ class SyncOrchestrator(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun runFullSync() {
+    suspend fun runFullSync() {
         val roster = rosterResolver.resolve()
         val total = roster.allKeys.size
         log.info(
@@ -33,10 +35,10 @@ class SyncOrchestrator(
         log.info("Full sync finished: {} characters in {}", total, duration)
     }
 
-    private fun syncAll(keys: Set<String>, source: CharacterSource) {
+    private suspend fun syncAll(keys: Set<String>, source: CharacterSource) {
         for (key in keys) {
             characterSyncService.syncCharacter(key, source)
-            Thread.sleep(props.sync.requestDelayMs)
+            delay(EventLimiter.DEFAULT_MIN_INTERVAL_MS)
         }
     }
 }

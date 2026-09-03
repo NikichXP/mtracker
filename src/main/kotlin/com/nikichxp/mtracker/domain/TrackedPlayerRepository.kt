@@ -1,5 +1,5 @@
 package com.nikichxp.mtracker.domain
 
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface TrackedPlayerRepository : MongoRepository<TrackedPlayer, String>
+interface TrackedPlayerRepository : JpaRepository<TrackedPlayer, Long>

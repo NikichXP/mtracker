@@ -24,7 +24,7 @@ class TrackedPlayerAdminController(private val repository: TrackedPlayerReposito
     fun list(): List<TrackedPlayerDto> = repository.findAll().map(::toDto)
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): TrackedPlayerDto = findOrThrow(id).let(::toDto)
+    fun get(@PathVariable id: Long): TrackedPlayerDto = findOrThrow(id).let(::toDto)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -38,7 +38,7 @@ class TrackedPlayerAdminController(private val repository: TrackedPlayerReposito
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: String, @RequestBody request: TrackedPlayerRequest): TrackedPlayerDto {
+    fun update(@PathVariable id: Long, @RequestBody request: TrackedPlayerRequest): TrackedPlayerDto {
         val existing = findOrThrow(id)
         val (displayName, characterKeys) = validated(request)
         return toDto(
@@ -50,12 +50,12 @@ class TrackedPlayerAdminController(private val repository: TrackedPlayerReposito
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: String) {
+    fun delete(@PathVariable id: Long) {
         findOrThrow(id)
         repository.deleteById(id)
     }
 
-    private fun findOrThrow(id: String): TrackedPlayer =
+    private fun findOrThrow(id: Long): TrackedPlayer =
         repository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown tracked player: $id") }
 
     private fun validated(request: TrackedPlayerRequest): Pair<String, List<String>> {

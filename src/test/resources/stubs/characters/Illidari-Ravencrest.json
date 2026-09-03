@@ -1,0 +1,35 @@
+{
+  "name": "Illidari",
+  "realm": "Ravencrest",
+  "class": "Demon Hunter",
+  "race": "Night Elf",
+  "faction": "alliance",
+  "active_spec_name": "Vengeance",
+  "active_spec_role": "TANK",
+  "guild": null,
+  "gear": {
+    "item_level_equipped": 620.0,
+    "item_level_total": 622.0
+  },
+  "mythic_plus_scores_by_season": [
+    {
+      "season": "season-tww-1",
+      "scores": {
+        "all": 2200.0
+      }
+    }
+  ],
+  "mythic_plus_weekly_highest_level_runs": [
+    {
+      "dungeon": "The Stonevault",
+      "mythic_level": 8,
+      "score": 130.0,
+      "num_keystone_upgrades": 1,
+      "cleared_in_time": true,
+      "completed_at": "2026-09-01T22:00:00Z",
+      "url": "https://raider.io/mythic-plus-runs/season-tww-1/12349"
+    }
+  ],
+  "mythic_plus_recent_runs": [],
+  "mythic_plus_best_runs": []
+}

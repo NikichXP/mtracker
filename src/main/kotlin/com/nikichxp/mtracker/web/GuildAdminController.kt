@@ -4,7 +4,7 @@ import com.nikichxp.mtracker.domain.TrackedGuild
 import com.nikichxp.mtracker.domain.TrackedGuildRepository
 import com.nikichxp.mtracker.web.dto.GuildRequest
 import com.nikichxp.mtracker.web.dto.TrackedGuildDto
-import org.springframework.dao.DuplicateKeyException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,7 +25,7 @@ class GuildAdminController(private val repository: TrackedGuildRepository) {
     fun list(): List<TrackedGuildDto> = repository.findAll().map(::toDto)
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): TrackedGuildDto = findOrThrow(id).let(::toDto)
+    fun get(@PathVariable id: Long): TrackedGuildDto = findOrThrow(id).let(::toDto)
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -33,30 +33,30 @@ class GuildAdminController(private val repository: TrackedGuildRepository) {
         val (name, realm) = validated(request)
         return try {
             toDto(repository.save(TrackedGuild(name = name, realm = realm)))
-        } catch (e: DuplicateKeyException) {
+        } catch (e: DataIntegrityViolationException) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Guild '$name-$realm' is already tracked", e)
         }
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: String, @RequestBody request: GuildRequest): TrackedGuildDto {
+    fun update(@PathVariable id: Long, @RequestBody request: GuildRequest): TrackedGuildDto {
         val existing = findOrThrow(id)
         val (name, realm) = validated(request)
         return try {
             toDto(repository.save(existing.copy(name = name, realm = realm)))
-        } catch (e: DuplicateKeyException) {
+        } catch (e: DataIntegrityViolationException) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Guild '$name-$realm' is already tracked", e)
         }
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: String) {
+    fun delete(@PathVariable id: Long) {
         findOrThrow(id)
         repository.deleteById(id)
     }
 
-    private fun findOrThrow(id: String): TrackedGuild =
+    private fun findOrThrow(id: Long): TrackedGuild =
         repository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown guild: $id") }
 
     private fun validated(request: GuildRequest): Pair<String, String> {

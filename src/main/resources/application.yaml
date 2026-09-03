@@ -21,18 +21,26 @@ spring:
     name: mtracker
   config:
     import: "optional:file:.env[.properties]"
-  mongodb:
-    uri: ${MONGODB_URI:mongodb://localhost:27017/mtracker_db}
-    database: ${MONGODB_DATABASE:mtracker_db}
-  data:
-    mongodb:
-      auto-index-creation: true
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:mtracker}}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 
 mtracker:
   region: ${MTRACKER_REGION:eu}
   sync:
     interval-hours: ${MTRACKER_SYNC_INTERVAL_HOURS:6}
-    request-delay-ms: ${MTRACKER_SYNC_REQUEST_DELAY_MS:250}
+    request-delay:
+      raider.io: 50
+    default-delay: 100
   raiderio:
     base-url: ${RAIDERIO_BASE_URL:https://raider.io/api/v1}
   s2s:
@@ -43,4 +51,4 @@ mtracker:
 logging:
   level:
     com.nikichxp.mtracker: ${LOG_LEVEL_MTRACKER:INFO}
-    org.mongodb.driver: ${LOG_LEVEL_MONGO_DRIVER:WARN}
+    org.hibernate.SQL: ${LOG_LEVEL_SQL:INFO}

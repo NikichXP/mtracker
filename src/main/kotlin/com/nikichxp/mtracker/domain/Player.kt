@@ -1,15 +1,38 @@
 package com.nikichxp.mtracker.domain
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.mongodb.core.index.Indexed
-import org.springframework.data.mongodb.core.mapping.Document
+import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.Table
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 
-@Document(collection = "players")
+@Entity
+@Table(
+    name = "players",
+    indexes = [
+        Index(name = "idx_players_player_key", columnList = "playerKey", unique = true)
+    ]
+)
 data class Player(
-    @Id val id: String? = null,
-    @Indexed(unique = true) val playerKey: String,
-    val displayName: String,
-    val characterKeys: List<String>,
-    val isFriend: Boolean,
-    val isGuildMember: Boolean,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+    @Column(nullable = false, unique = true)
+    val playerKey: String = "",
+    val displayName: String = "",
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "player_character_keys", joinColumns = [JoinColumn(name = "player_id")])
+    @Column(name = "character_key")
+    @Fetch(FetchMode.SUBSELECT)
+    val characterKeys: List<String> = emptyList(),
+    val isFriend: Boolean = false,
+    val isGuildMember: Boolean = false,
 )

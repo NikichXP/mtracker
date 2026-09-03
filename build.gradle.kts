@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.4.10"
     kotlin("plugin.spring") version "2.4.10"
+    kotlin("plugin.jpa") version "2.4.10"
     id("org.springframework.boot") version "4.0.7"
 }
 
@@ -15,9 +16,14 @@ dependencies {
     implementation(platform("org.springframework.boot:spring-boot-dependencies:4.0.7"))
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework.boot:spring-boot-starter-webclient")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    val ktorVersion = "3.1.1"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("org.postgresql:postgresql")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
@@ -26,6 +32,12 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
+    testImplementation("com.h2database:h2")
+    testImplementation("io.cucumber:cucumber-java:7.21.1")
+    testImplementation("io.cucumber:cucumber-spring:7.21.1")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.21.1")
+    testImplementation("org.junit.platform:junit-platform-suite")
 }
 
 kotlin {

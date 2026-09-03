@@ -7,30 +7,32 @@ import com.nikichxp.mtracker.domain.DungeonRun
 import com.nikichxp.mtracker.domain.WeekKeyCalculator
 import com.nikichxp.mtracker.domain.WeeklySnapshot
 import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
-import com.nikichxp.mtracker.raiderio.RaiderIoClient
+import com.nikichxp.mtracker.raiderio.IRaiderIoService
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.KeystoneRunDto
 import com.nikichxp.mtracker.config.MtrackerProperties
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 
 @Component
+@Transactional
 class CharacterSyncService(
-    private val raiderIoClient: RaiderIoClient,
+    private val raiderIoService: IRaiderIoService,
     private val characterRepository: CharacterRepository,
     private val weeklySnapshotRepository: WeeklySnapshotRepository,
     private val props: MtrackerProperties,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun syncCharacter(characterKey: String, source: CharacterSource) {
+    suspend fun syncCharacter(characterKey: String, source: CharacterSource) {
         val (name, realm) = splitKey(characterKey) ?: run {
             log.warn("Skipping malformed character key '{}'", characterKey)
             return
         }
 
-        val profile = raiderIoClient.fetchCharacterProfile(name, realm)
+        val profile = raiderIoService.fetchCharacterProfile(name, realm)
         if (profile == null) {
             log.warn("No Raider.io profile for {} ({}), skipping sync", characterKey, source)
             return

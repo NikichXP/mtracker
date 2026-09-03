@@ -1,7 +1,7 @@
 # mtracker
 
 Трекер Mythic+ статистики гильдии и друзей в World of Warcraft на основе публичного API
-[Raider.IO](https://raider.io/api). Собирает данные с фиксированным интервалом, хранит их в MongoDB
+[Raider.IO](https://raider.io/api). Собирает данные с фиксированным интервалом, хранит их в PostgreSQL
 и отдаёт агрегированную статистику по игрокам (основной персонаж + альты) через REST API.
 
 Монорепозиторий: бэкенд — в корне, дашборд-фронтенд (React + MUI) — в
@@ -12,9 +12,11 @@
 ## Стек
 
 - **Kotlin 2.4.10**, **JDK 21** (через `jvmToolchain(21)`)
-- **Spring Boot 4.0.7**: `spring-boot-starter-webflux` (WebClient для вызовов Raider.IO + Netty),
-  `spring-boot-starter-data-mongodb` (блокирующий `MongoRepository`/`MongoTemplate`),
+- **Spring Boot 4.0.7**: `spring-boot-starter-webflux` (Netty),
+  `spring-boot-starter-data-jpa` (Hibernate, `JpaRepository`),
   `spring-boot-starter-actuator`
+- **HTTP-клиент**: **Ktor Client** (`cio`, `content-negotiation`, `serialization-jackson`) для вызовов Raider.IO
+- База данных: **PostgreSQL** (`org.postgresql:postgresql`)
 - JSON: Jackson (`jackson-module-kotlin`)
 - Сборка: **Gradle 9.x** (wrapper)
 
@@ -25,7 +27,7 @@
 синхронизации, S2S/admin токены и т.д.) тоже задаются через переменные окружения — см.
 `.env.example`.
 
-**Какие гильдии и персонажи отслеживаются — больше не статический конфиг, а данные в MongoDB**
+**Какие гильдии и персонажи отслеживаются — больше не статический конфиг, а данные в PostgreSQL**
 (`TrackedGuild` / `TrackedPlayer`), управляемые через CRUD REST API — см. раздел «Admin API» ниже.
 Список гильдий/персонажей можно менять на лету, без передеплоя.
 
@@ -43,7 +45,7 @@ cp .env.example .env
 # и добавить хотя бы одну гильдию/персонажа через Admin API (см. ниже)
 ```
 
-`.env` в `.gitignore` и никогда не коммитится — храните в нём реальные значения (пароли Mongo,
+`.env` в `.gitignore` и никогда не коммитится — храните в нём реальные значения (пароли PostgreSQL,
 S2S/admin-токены и т.д.), а `.env.example` держите в актуальном состоянии как шаблон без секретов.
 
 Явные связи "основной персонаж → альты" (`TrackedPlayer.characterKeys`, первый элемент — main)
@@ -55,7 +57,7 @@ S2S/admin-токены и т.д.), а `.env.example` держите в акту�
 
 `SyncScheduler` запускает `SyncOrchestrator.runFullSync()` раз в `mtracker.sync.interval-hours`
 (по умолчанию 6ч) и один раз сразу после старта приложения. Между запросами к Raider.IO —
-пауза `mtracker.sync.request-delay-ms` (по умолчанию 250мс), чтобы не превышать лимит ~300 запросов/мин.
+пауза 250 мс (константа в `EventLimiter`), чтобы не превышать лимит ~300 запросов/мин.
 Ручной запуск синхронизации — `POST /api/v1/sync/run`.
 
 ## REST API
@@ -134,7 +136,7 @@ Traefik Ingress + cert-manager, домен `mtracker.nikichxp.xyz`). MongoDB —
 
 ## Запуск локально
 
-Требуется **JDK 21** и запущенная **MongoDB** на `localhost:27017`.
+Требуется **JDK 21** и запущенный **PostgreSQL** на `localhost:5432`.
 
 ```powershell
 .\gradlew.bat bootRun

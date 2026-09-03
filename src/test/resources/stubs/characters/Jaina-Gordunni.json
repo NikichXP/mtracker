@@ -1,0 +1,39 @@
+{
+  "name": "Jaina",
+  "realm": "Gordunni",
+  "class": "Mage",
+  "race": "Human",
+  "faction": "alliance",
+  "active_spec_name": "Frost",
+  "active_spec_role": "DPS",
+  "guild": {
+    "name": "Bloodline",
+    "realm": "Gordunni",
+    "rank": "1"
+  },
+  "gear": {
+    "item_level_equipped": 630.0,
+    "item_level_total": 632.0
+  },
+  "mythic_plus_scores_by_season": [
+    {
+      "season": "season-tww-1",
+      "scores": {
+        "all": 2720.0
+      }
+    }
+  ],
+  "mythic_plus_weekly_highest_level_runs": [
+    {
+      "dungeon": "Ara-Kara",
+      "mythic_level": 11,
+      "score": 175.0,
+      "num_keystone_upgrades": 1,
+      "cleared_in_time": true,
+      "completed_at": "2026-09-02T19:00:00Z",
+      "url": "https://raider.io/mythic-plus-runs/season-tww-1/12347"
+    }
+  ],
+  "mythic_plus_recent_runs": [],
+  "mythic_plus_best_runs": []
+}

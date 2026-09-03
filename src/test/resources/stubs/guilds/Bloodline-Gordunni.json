@@ -1,0 +1,24 @@
+{
+  "name": "Bloodline",
+  "realm": "Gordunni",
+  "members": [
+    {
+      "character": {
+        "name": "Arthas",
+        "realm": "Gordunni",
+        "class": "Death Knight",
+        "race": "Human"
+      },
+      "rank": 0
+    },
+    {
+      "character": {
+        "name": "Jaina",
+        "realm": "Gordunni",
+        "class": "Mage",
+        "race": "Human"
+      },
+      "rank": 1
+    }
+  ]
+}

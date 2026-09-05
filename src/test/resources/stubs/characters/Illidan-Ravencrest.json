@@ -30,6 +30,16 @@
       "url": "https://raider.io/mythic-plus-runs/season-tww-1/12348"
     }
   ],
-  "mythic_plus_recent_runs": [],
+  "mythic_plus_recent_runs": [
+    {
+      "dungeon": "Mists of Tirna Scithe",
+      "mythic_level": 14,
+      "score": 210.0,
+      "num_keystone_upgrades": 2,
+      "cleared_in_time": true,
+      "completed_at": "2026-09-01T21:00:00Z",
+      "url": "https://raider.io/mythic-plus-runs/season-tww-1/22346"
+    }
+  ],
   "mythic_plus_best_runs": []
 }

@@ -178,6 +178,79 @@ class RaiderIoServiceImplTest {
     }
 
     @Test
+    fun fetchRunDetailsSuccess(): Unit = runBlocking {
+        mockEngineHandler = { request ->
+            assertThat(request.url.encodedPath).isEqualTo("/api/v1/mythic-plus/run-details")
+            assertThat(request.url.parameters["season"]).isEqualTo("season-tww-1")
+            assertThat(request.url.parameters["id"]).isEqualTo("22345")
+
+            val json = """
+                {
+                    "season": "season-tww-1",
+                    "keystone_run_id": 22345,
+                    "mythic_level": 12,
+                    "clear_time_ms": 1650000,
+                    "keystone_time_ms": 1980000,
+                    "completed_at": "2026-09-02T18:30:00.000Z",
+                    "num_chests": 1,
+                    "score": 185.2,
+                    "dungeon": { "name": "The Stonevault", "short_name": "SV" },
+                    "roster": [
+                        {
+                            "character": {
+                                "name": "Arthas",
+                                "class": { "name": "Death Knight", "slug": "death-knight" },
+                                "spec": { "name": "Blood", "slug": "blood", "role": "tank" },
+                                "realm": { "name": "Gordunni", "slug": "gordunni" },
+                                "region": { "name": "Europe", "short_name": "EU", "slug": "eu" }
+                            },
+                            "role": "tank",
+                            "guild": { "name": "Bloodline" },
+                            "items": { "item_level_equipped": 635 },
+                            "ranks": { "score": 2850.5 }
+                        }
+                    ]
+                }
+            """.trimIndent()
+
+            respond(
+                content = json,
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "application/json"),
+            )
+        }
+
+        val details = service.fetchRunDetails("season-tww-1", 22345)
+        assertThat(details).isNotNull
+        assertThat(details!!.keystoneRunId).isEqualTo(22345)
+        assertThat(details.dungeon?.name).isEqualTo("The Stonevault")
+        assertThat(details.numChests).isEqualTo(1)
+        assertThat(details.roster).hasSize(1)
+        val member = details.roster[0]
+        assertThat(member.character?.name).isEqualTo("Arthas")
+        assertThat(member.character?.realm?.name).isEqualTo("Gordunni")
+        assertThat(member.character?.characterClass?.name).isEqualTo("Death Knight")
+        assertThat(member.character?.spec?.name).isEqualTo("Blood")
+        assertThat(member.guild?.name).isEqualTo("Bloodline")
+        assertThat(member.items?.itemLevelEquipped).isEqualTo(635.0)
+        assertThat(member.ranks?.score).isEqualTo(2850.5)
+    }
+
+    @Test
+    fun fetchRunDetailsError(): Unit = runBlocking {
+        mockEngineHandler = { _ ->
+            respond(
+                content = "Not Found",
+                status = HttpStatusCode.NotFound,
+                headers = headersOf(HttpHeaders.ContentType, "text/plain"),
+            )
+        }
+
+        val details = service.fetchRunDetails("season-tww-1", 99999)
+        assertThat(details).isNull()
+    }
+
+    @Test
     fun beansHttpClientUsesCioEngine() {
         val beans = Beans()
         val client = beans.httpClient(objectMapper)

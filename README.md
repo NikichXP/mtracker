@@ -55,10 +55,26 @@ S2S/admin-токены и т.д.), а `.env.example` держите в акту�
 
 ## Синхронизация
 
-`SyncScheduler` запускает `SyncOrchestrator.runFullSync()` раз в `mtracker.sync.interval-hours`
-(по умолчанию 6ч) и один раз сразу после старта приложения. Между запросами к Raider.IO —
-пауза 250 мс (константа в `EventLimiter`), чтобы не превышать лимит ~300 запросов/мин.
-Ручной запуск синхронизации — `POST /api/v1/sync/run`.
+Обновление данных — поигроковое, по расписанию `players.next_update_at` (когда обновлять
+игрока в следующий раз; `NULL` = «обновить немедленно»):
+
+- `PlayerUpdateScheduler` каждые `mtracker.sync.poll-interval-ms` (по умолчанию 60с) обновляет
+  всех игроков с наступившим сроком (`PlayerUpdateService`, батчами по `mtracker.sync.batch-size`).
+- Обновление игрока: для каждого его персонажа тянется профиль Raider.IO (включая ~10 последних
+  runs). Runs сохраняются в `runs` (1 строка на run) + `run_players` (5 строк на 5 членов
+  ростера, со снапшотом rio/ilvl/класса/спека/гильдии на момент запроса; `player_id` — FK на
+  `players`, если член ростера — отслеживаемый персонаж). Ростер run дотягивается с эндпоинта
+  `mythic-plus/run-details` и запрашивается один раз на run, даже если run виден у нескольких
+  отслеживаемых персонажей.
+- После обновления `UpdateScheduleService` назначает следующий срок по лучшему rio игрока:
+  `< 500` — раз в сутки, `500..2000` — раз в 8 часов, `> 2000` — раз в час.
+- `SyncScheduler` запускает `SyncOrchestrator.runFullSync()` раз в `mtracker.sync.interval-hours`
+  (по умолчанию 6ч) и один раз после старта: полный прогон пересобирает таблицу `players`
+  из ростера гильдий + `TrackedPlayer` (при этом `next_update_at`/`rio_score` сохраняются) и
+  обновляет всех игроков с наступившим сроком. Ручной запуск — `POST /api/v1/sync/run`.
+
+Между запросами к Raider.IO — пауза 50 мс (`mtracker.sync.request-delay` → `raider.io`,
+конфиг в `application.yaml`), чтобы не превышать лимит ~300 запросов/мин.
 
 ## REST API
 

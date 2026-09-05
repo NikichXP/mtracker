@@ -1,0 +1,88 @@
+{
+  "season": "season-tww-1",
+  "keystone_run_id": 22346,
+  "mythic_level": 14,
+  "clear_time_ms": 1500000,
+  "keystone_time_ms": 1920000,
+  "completed_at": "2026-09-01T21:00:00Z",
+  "num_chests": 2,
+  "score": 210.0,
+  "dungeon": {
+    "id": 2,
+    "name": "Mists of Tirna Scithe",
+    "short_name": "MISTS",
+    "slug": "mists-of-tirna-scithe"
+  },
+  "roster": [
+    {
+      "character": {
+        "name": "Illidan",
+        "class": { "name": "Demon Hunter", "slug": "demon-hunter" },
+        "spec": { "name": "Havoc", "slug": "havoc", "role": "dps" },
+        "realm": { "name": "Ravencrest", "slug": "ravencrest" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "alliance"
+      },
+      "role": "dps",
+      "guild": null,
+      "items": { "item_level_equipped": 639 },
+      "ranks": { "score": 3050.0 }
+    },
+    {
+      "character": {
+        "name": "Pugtank",
+        "class": { "name": "Warrior", "slug": "warrior" },
+        "spec": { "name": "Protection", "slug": "protection", "role": "tank" },
+        "realm": { "name": "Twisting Nether", "slug": "twisting-nether" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "tank",
+      "guild": { "name": "Puglife" },
+      "items": { "item_level_equipped": 640 },
+      "ranks": { "score": 3100.0 }
+    },
+    {
+      "character": {
+        "name": "Pugheal",
+        "class": { "name": "Shaman", "slug": "shaman" },
+        "spec": { "name": "Restoration", "slug": "restoration", "role": "healer" },
+        "realm": { "name": "Draenor", "slug": "draenor" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "healer",
+      "guild": null,
+      "items": { "item_level_equipped": 638 },
+      "ranks": { "score": 3000.0 }
+    },
+    {
+      "character": {
+        "name": "Pugmage",
+        "class": { "name": "Mage", "slug": "mage" },
+        "spec": { "name": "Fire", "slug": "fire", "role": "dps" },
+        "realm": { "name": "Silvermoon", "slug": "silvermoon" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "dps",
+      "guild": null,
+      "items": { "item_level_equipped": 637 },
+      "ranks": { "score": 2980.0 }
+    },
+    {
+      "character": {
+        "name": "Pugrogue",
+        "class": { "name": "Rogue", "slug": "rogue" },
+        "spec": { "name": "Subtlety", "slug": "subtlety", "role": "dps" },
+        "realm": { "name": "Kazzak", "slug": "kazzak" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "dps",
+      "guild": null,
+      "items": { "item_level_equipped": 636 },
+      "ranks": { "score": 2950.0 }
+    }
+  ]
+}

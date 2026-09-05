@@ -48,14 +48,6 @@ data class Character(
     @CollectionTable(name = "character_weekly_runs", joinColumns = [JoinColumn(name = "character_id")])
     @Fetch(FetchMode.SUBSELECT)
     val weeklyRuns: List<DungeonRun> = emptyList(),
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "character_recent_runs", joinColumns = [JoinColumn(name = "character_id")])
-    @Fetch(FetchMode.SUBSELECT)
-    val recentRuns: List<DungeonRun> = emptyList(),
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "character_best_runs", joinColumns = [JoinColumn(name = "character_id")])
-    @Fetch(FetchMode.SUBSELECT)
-    val bestRuns: List<DungeonRun> = emptyList(),
     @Enumerated(EnumType.STRING)
     val source: CharacterSource = CharacterSource.GUILD,
     val lastSyncedAt: Instant? = null,

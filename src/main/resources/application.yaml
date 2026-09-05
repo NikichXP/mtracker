@@ -38,6 +38,8 @@ mtracker:
   region: ${MTRACKER_REGION:eu}
   sync:
     interval-hours: ${MTRACKER_SYNC_INTERVAL_HOURS:6}
+    poll-interval-ms: ${MTRACKER_SYNC_POLL_INTERVAL_MS:60000}
+    batch-size: ${MTRACKER_SYNC_BATCH_SIZE:10}
     request-delay:
       raider.io: 50
     default-delay: 100

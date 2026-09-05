@@ -43,6 +43,16 @@
       "url": "https://raider.io/mythic-plus-runs/season-tww-1/12346"
     }
   ],
-  "mythic_plus_recent_runs": [],
+  "mythic_plus_recent_runs": [
+    {
+      "dungeon": "The Stonevault",
+      "mythic_level": 12,
+      "score": 185.2,
+      "num_keystone_upgrades": 1,
+      "cleared_in_time": true,
+      "completed_at": "2026-09-02T18:30:00Z",
+      "url": "https://raider.io/mythic-plus-runs/season-tww-1/22345"
+    }
+  ],
   "mythic_plus_best_runs": []
 }

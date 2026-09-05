@@ -26,16 +26,21 @@ class CharacterSyncService(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    suspend fun syncCharacter(characterKey: String, source: CharacterSource) {
+    /**
+     * Fetches the Raider.io profile and upserts the [Character] row + weekly snapshot.
+     * Returns the fetched profile (so the caller can process recent runs), or `null` when
+     * the character has no accessible profile.
+     */
+    suspend fun syncCharacter(characterKey: String, source: CharacterSource): CharacterProfileDto? {
         val (name, realm) = splitKey(characterKey) ?: run {
             log.warn("Skipping malformed character key '{}'", characterKey)
-            return
+            return null
         }
 
         val profile = raiderIoService.fetchCharacterProfile(name, realm)
         if (profile == null) {
             log.warn("No Raider.io profile for {} ({}), skipping sync", characterKey, source)
-            return
+            return null
         }
 
         val existing = characterRepository.findByCharacterKey(characterKey)
@@ -43,6 +48,7 @@ class CharacterSyncService(
         characterRepository.save(character)
 
         upsertWeeklySnapshot(characterKey, character)
+        return profile
     }
 
     private fun splitKey(characterKey: String): Pair<String, String>? {
@@ -73,8 +79,6 @@ class CharacterSyncService(
             itemLevelEquipped = profile.gear?.itemLevelEquipped,
             mythicPlusScore = score,
             weeklyRuns = profile.mythicPlusWeeklyHighestLevelRuns.mapNotNull(::toDungeonRun),
-            recentRuns = profile.mythicPlusRecentRuns.mapNotNull(::toDungeonRun),
-            bestRuns = profile.mythicPlusBestRuns.mapNotNull(::toDungeonRun),
             source = source,
             lastSyncedAt = Instant.now(),
         )

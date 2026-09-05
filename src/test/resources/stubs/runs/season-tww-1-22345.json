@@ -1,0 +1,88 @@
+{
+  "season": "season-tww-1",
+  "keystone_run_id": 22345,
+  "mythic_level": 12,
+  "clear_time_ms": 1650000,
+  "keystone_time_ms": 1980000,
+  "completed_at": "2026-09-02T18:30:00Z",
+  "num_chests": 1,
+  "score": 185.2,
+  "dungeon": {
+    "id": 1,
+    "name": "The Stonevault",
+    "short_name": "SV",
+    "slug": "the-stonevault"
+  },
+  "roster": [
+    {
+      "character": {
+        "name": "Arthas",
+        "class": { "name": "Death Knight", "slug": "death-knight" },
+        "spec": { "name": "Blood", "slug": "blood", "role": "tank" },
+        "realm": { "name": "Gordunni", "slug": "gordunni" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "alliance"
+      },
+      "role": "tank",
+      "guild": { "name": "Bloodline" },
+      "items": { "item_level_equipped": 635 },
+      "ranks": { "score": 2850.5 }
+    },
+    {
+      "character": {
+        "name": "Jaina",
+        "class": { "name": "Mage", "slug": "mage" },
+        "spec": { "name": "Frost", "slug": "frost", "role": "dps" },
+        "realm": { "name": "Gordunni", "slug": "gordunni" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "alliance"
+      },
+      "role": "dps",
+      "guild": { "name": "Bloodline" },
+      "items": { "item_level_equipped": 630 },
+      "ranks": { "score": 2720.0 }
+    },
+    {
+      "character": {
+        "name": "Pugheal",
+        "class": { "name": "Priest", "slug": "priest" },
+        "spec": { "name": "Holy", "slug": "holy", "role": "healer" },
+        "realm": { "name": "Draenor", "slug": "draenor" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "healer",
+      "guild": { "name": "Puglife" },
+      "items": { "item_level_equipped": 628 },
+      "ranks": { "score": 2450.0 }
+    },
+    {
+      "character": {
+        "name": "Pugdps",
+        "class": { "name": "Hunter", "slug": "hunter" },
+        "spec": { "name": "Marksmanship", "slug": "marksmanship", "role": "dps" },
+        "realm": { "name": "Draenor", "slug": "draenor" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "dps",
+      "guild": null,
+      "items": { "item_level_equipped": 627 },
+      "ranks": { "score": 2400.0 }
+    },
+    {
+      "character": {
+        "name": "Puglock",
+        "class": { "name": "Warlock", "slug": "warlock" },
+        "spec": { "name": "Affliction", "slug": "affliction", "role": "dps" },
+        "realm": { "name": "Ragnaros", "slug": "ragnaros" },
+        "region": { "name": "Europe", "short_name": "EU", "slug": "eu" },
+        "faction": "horde"
+      },
+      "role": "dps",
+      "guild": null,
+      "items": { "item_level_equipped": 625 },
+      "ranks": { "score": 2300.0 }
+    }
+  ]
+}

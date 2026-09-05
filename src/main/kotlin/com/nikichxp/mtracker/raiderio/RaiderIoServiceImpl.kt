@@ -4,6 +4,7 @@ import com.nikichxp.mtracker.config.MtrackerProperties
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.GuildMemberDto
 import com.nikichxp.mtracker.raiderio.dto.GuildProfileDto
+import com.nikichxp.mtracker.raiderio.dto.RunDetailsDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -32,7 +33,6 @@ class RaiderIoServiceImpl(
         "mythic_plus_scores_by_season:current",
         "mythic_plus_ranks",
         "mythic_plus_recent_runs",
-        "mythic_plus_best_runs",
         "mythic_plus_weekly_highest_level_runs",
     ).joinToString(",")
 
@@ -86,6 +86,30 @@ class RaiderIoServiceImpl(
         } catch (e: Exception) {
             log.warn("Failed to fetch guild roster for {}-{}: {}", guildName, guildRealm, e.message)
             emptyList()
+        }
+    }
+
+    override suspend fun fetchRunDetails(season: String, keystoneRunId: Long): RunDetailsDto? {
+        return try {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/mythic-plus/run-details") {
+                parameter("season", season)
+                parameter("id", keystoneRunId)
+            }
+            if (response.status.isSuccess()) {
+                response.body<RunDetailsDto>()
+            } else {
+                log.warn(
+                    "Failed to fetch run details for {}/{}: {} {}",
+                    season,
+                    keystoneRunId,
+                    response.status.value,
+                    response.status.description
+                )
+                null
+            }
+        } catch (e: Exception) {
+            log.warn("Failed to fetch run details for {}/{}: {}", season, keystoneRunId, e.message)
+            null
         }
     }
 

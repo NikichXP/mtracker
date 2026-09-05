@@ -60,6 +60,90 @@ data class KeystoneRunDto(
     val url: String? = null,
 )
 
+/** Response of `GET /mythic-plus/run-details?season=...&id=...`. Many fields intentionally unmapped. */
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RunDetailsDto(
+    val season: String? = null,
+    @JsonProperty("keystone_run_id") val keystoneRunId: Long? = null,
+    @JsonProperty("mythic_level") val mythicLevel: Int? = null,
+    @JsonProperty("clear_time_ms") val clearTimeMs: Long? = null,
+    @JsonProperty("keystone_time_ms") val keystoneTimeMs: Long? = null,
+    @JsonProperty("completed_at") val completedAt: Instant? = null,
+    @JsonProperty("num_chests") val numChests: Int? = null,
+    val score: Double? = null,
+    val dungeon: RunDungeonDto? = null,
+    val roster: List<RunRosterMemberDto> = emptyList(),
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RunDungeonDto(
+    val name: String? = null,
+    @JsonProperty("short_name") val shortName: String? = null,
+    val slug: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RunRosterMemberDto(
+    val character: RosterCharacterDto? = null,
+    /** Role in the group (tank, healer, dps). */
+    val role: String? = null,
+    val guild: RosterGuildDto? = null,
+    val items: RosterItemsDto? = null,
+    val ranks: RosterRanksDto? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterCharacterDto(
+    val name: String? = null,
+    @JsonProperty("class") val characterClass: NamedSlugDto? = null,
+    val spec: RosterSpecDto? = null,
+    val realm: RosterRealmDto? = null,
+    val region: RosterRegionDto? = null,
+    val faction: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class NamedSlugDto(
+    val name: String? = null,
+    val slug: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterSpecDto(
+    val name: String? = null,
+    val slug: String? = null,
+    val role: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterRealmDto(
+    val name: String? = null,
+    val slug: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterRegionDto(
+    val name: String? = null,
+    @JsonProperty("short_name") val shortName: String? = null,
+    val slug: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterGuildDto(
+    val name: String? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterItemsDto(
+    @JsonProperty("item_level_equipped") val itemLevelEquipped: Double? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class RosterRanksDto(
+    /** M+ score of the character at the point of fetch. */
+    val score: Double? = null,
+)
+
 /** Response of `GET /guilds/profile?...&fields=members`. */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class GuildProfileDto(

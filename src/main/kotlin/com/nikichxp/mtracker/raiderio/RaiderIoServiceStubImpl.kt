@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.GuildMemberDto
 import com.nikichxp.mtracker.raiderio.dto.GuildProfileDto
+import com.nikichxp.mtracker.raiderio.dto.RunDetailsDto
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.core.io.ResourceLoader
@@ -62,6 +63,21 @@ class RaiderIoServiceStubImpl(
         }
         log.warn("No stub found for guild {}-{} in candidates: {}", guildName, guildRealm, candidates)
         return emptyList()
+    }
+
+    override suspend fun fetchRunDetails(season: String, keystoneRunId: Long): RunDetailsDto? {
+        val candidate = "stubs/runs/$season-$keystoneRunId.json"
+        val content = readStubContent(candidate)
+        if (content == null) {
+            log.warn("No stub found for run {}/{} ({})", season, keystoneRunId, candidate)
+            return null
+        }
+        return try {
+            objectMapper.readValue<RunDetailsDto>(content)
+        } catch (e: Exception) {
+            log.error("Failed to deserialize stub $candidate", e)
+            null
+        }
     }
 
     private fun readStubContent(path: String): String? {

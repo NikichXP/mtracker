@@ -60,6 +60,9 @@ class PlayerLinkService(
                 characterKeys = characterKeys,
                 isFriend = isFriend,
                 isGuildMember = isGuildMember,
+                rioScore = existing?.rioScore,
+                lastSyncedAt = existing?.lastSyncedAt,
+                nextUpdateAt = existing?.nextUpdateAt,
             ),
         )
     }

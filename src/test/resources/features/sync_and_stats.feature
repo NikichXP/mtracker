@@ -25,6 +25,17 @@ Feature: Sync and Stats API
     And character "Illidan-Ravencrest" has spec "Havoc" role "DPS" score 3050.0 and 1 weekly runs
     And character "Illidari-Ravencrest" has spec "Vengeance" role "TANK" score 2200.0 and 1 weekly runs
 
+  Scenario: Runs are stored with full roster and players are scheduled by score
+    Given a sync is triggered
+    Then the stored run 22345 in season "season-tww-1" has 5 roster players
+    And the stored run 22346 in season "season-tww-1" has 5 roster players
+    And the roster player "Arthas-Gordunni" of run 22345 in season "season-tww-1" is linked to a tracked player
+    And the roster player "Jaina-Gordunni" of run 22345 in season "season-tww-1" is linked to a tracked player
+    And the roster player "Pugheal-Draenor" of run 22345 in season "season-tww-1" is not linked to a tracked player
+    And the roster player "Illidan-Ravencrest" of run 22346 in season "season-tww-1" is linked to a tracked player
+    And player "Arthas-Gordunni" has rioScore 2850.5 and next update scheduled
+    And player "Illidan-Ravencrest" has rioScore 3050.0 and next update scheduled
+
   Scenario: Verify weekly stats and available weeks
     Given a sync is triggered
     When a user gets available weeks

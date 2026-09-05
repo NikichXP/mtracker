@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.nikichxp.mtracker.domain.CharacterRepository
 import com.nikichxp.mtracker.domain.PlayerRepository
+import com.nikichxp.mtracker.domain.RunPlayerRepository
+import com.nikichxp.mtracker.domain.RunRepository
 import com.nikichxp.mtracker.domain.TrackedGuildRepository
 import com.nikichxp.mtracker.domain.TrackedPlayerRepository
 import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
@@ -27,6 +29,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.EntityExchangeResult
 import org.springframework.test.web.reactive.server.WebTestClient
+import java.time.Instant
 
 class StepDefinitions(
     private val applicationContext: ApplicationContext,
@@ -37,6 +40,8 @@ class StepDefinitions(
     private val playerRepository: PlayerRepository,
     private val characterRepository: CharacterRepository,
     private val weeklySnapshotRepository: WeeklySnapshotRepository,
+    private val runRepository: RunRepository,
+    private val runPlayerRepository: RunPlayerRepository,
 ) {
 
     private val webTestClient: WebTestClient by lazy {
@@ -50,6 +55,8 @@ class StepDefinitions(
 
     @Given("the database is cleaned")
     fun cleanDatabase() {
+        runPlayerRepository.deleteAll()
+        runRepository.deleteAll()
         weeklySnapshotRepository.deleteAll()
         playerRepository.deleteAll()
         characterRepository.deleteAll()
@@ -293,6 +300,46 @@ class StepDefinitions(
         assertThat(item!!.weeklyRunsCount).isEqualTo(runs)
         assertThat(item.totalScore).isEqualTo(score)
     }
+
+    @Then("the stored run {long} in season {string} has {int} roster players")
+    fun assertStoredRunRosterSize(keystoneRunId: Long, season: String, rosterSize: Int) {
+        val run = runRepository.findBySeasonAndKeystoneRunId(season, keystoneRunId)
+        assertThat(run).isNotNull
+        assertThat(runPlayerRepository.findByRunIdIn(listOf(run!!.id!!))).hasSize(rosterSize)
+    }
+
+    @Then("the roster player {string} of run {long} in season {string} is linked to a tracked player")
+    fun assertRosterPlayerLinked(characterKey: String, keystoneRunId: Long, season: String) {
+        val member = findRosterPlayer(characterKey, keystoneRunId, season)
+        assertThat(member.player).isNotNull
+        assertThat(member.rioScore).isNotNull()
+        assertThat(member.characterClass).isNotNull()
+        assertThat(member.itemLevel).isNotNull()
+    }
+
+    @Then("the roster player {string} of run {long} in season {string} is not linked to a tracked player")
+    fun assertRosterPlayerNotLinked(characterKey: String, keystoneRunId: Long, season: String) {
+        val member = findRosterPlayer(characterKey, keystoneRunId, season)
+        assertThat(member.player).isNull()
+    }
+
+    @Then("player {string} has rioScore {double} and next update scheduled")
+    fun assertPlayerSchedule(playerKey: String, rioScore: Double) {
+        val player = playerRepository.findByPlayerKey(playerKey)
+        assertThat(player).isNotNull
+        assertThat(player!!.rioScore).isEqualTo(rioScore)
+        assertThat(player.nextUpdateAt).isNotNull()
+        assertThat(player.nextUpdateAt).isAfter(Instant.now())
+    }
+
+    private fun findRosterPlayer(characterKey: String, keystoneRunId: Long, season: String) =
+        runRepository.findBySeasonAndKeystoneRunId(season, keystoneRunId)
+            .let { run ->
+                assertThat(run).isNotNull
+                runPlayerRepository.findByRunIdIn(listOf(run!!.id!!))
+                    .firstOrNull { it.characterKey == characterKey }
+                    .also { assertThat(it).isNotNull }!!
+            }
 
     @When("an S2S client gets overview stats")
     fun s2sGetsOverview() {

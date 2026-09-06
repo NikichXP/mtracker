@@ -1,4 +1,4 @@
-package com.nikichxp.mtracker.web
+package com.nikichxp.mtracker.api
 
 import com.nikichxp.mtracker.domain.TrackedPlayer
 import com.nikichxp.mtracker.domain.TrackedPlayerRepository

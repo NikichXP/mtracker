@@ -14,7 +14,7 @@ import com.nikichxp.mtracker.web.dto.WeeklyPlayerStatsDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-/** Builds the read-only DTOs served by [StatsController] out of the stored domain data. */
+/** Builds the read-only DTOs served by [com.nikichxp.mtracker.api.StatsController] out of the stored domain data. */
 @Service
 @Transactional(readOnly = true)
 class StatsService(
@@ -96,13 +96,13 @@ class StatsService(
         activeSpecRole = character.activeSpecRole,
         itemLevelEquipped = character.itemLevelEquipped,
         mythicPlusScore = character.mythicPlusScore,
-        weeklyRuns = character.weeklyRuns.map {
+        weeklyRuns = character.weeklyRuns.map { run ->
             DungeonRunDto(
-                dungeonName = it.dungeonName,
-                mythicLevel = it.mythicLevel,
-                score = it.score,
-                timed = it.timed,
-                completedAt = it.completedAt,
+                dungeonName = run.dungeonName,
+                mythicLevel = run.mythicLevel,
+                score = run.score,
+                timed = run.timed,
+                completedAt = run.completedAt,
             )
         },
         lastSyncedAt = character.lastSyncedAt,

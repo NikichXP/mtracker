@@ -15,5 +15,5 @@ WORKDIR /app
 COPY --from=build /app/build/libs/app.jar app.jar
 
 EXPOSE 8080
-ENV JAVA_OPTS="-Xmx768m -XX:MaxMetaspaceSize=128m -XX:MaxDirectMemorySize=64m -XX:ReservedCodeCacheSize=64m -Xss512k -XX:G1HeapRegionSize=4m"
+ENV JAVA_OPTS="-Xms128m -Xmx256m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=48m -XX:MaxDirectMemorySize=32m -Xss256k"
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

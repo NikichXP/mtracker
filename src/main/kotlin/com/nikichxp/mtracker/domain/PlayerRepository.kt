@@ -9,6 +9,8 @@ import java.time.Instant
 interface PlayerRepository : JpaRepository<Player, Long> {
     fun findByPlayerKey(playerKey: String): Player?
 
+    fun findByRioScoreGreaterThan(score: Double): List<Player>
+
     @Query("select distinct p from Player p join p.characterKeys k where k in :keys")
     fun findByCharacterKeysIn(@Param("keys") keys: Collection<String>): List<Player>
 

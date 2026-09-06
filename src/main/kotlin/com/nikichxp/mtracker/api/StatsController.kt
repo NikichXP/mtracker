@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
-/** Read-only endpoints backing the mtracker dashboard frontend. */
 @RestController
 @RequestMapping("/api/v1/stats")
 class StatsController(private val statsService: StatsService) {

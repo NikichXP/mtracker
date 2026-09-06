@@ -20,7 +20,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-/** Builds the read-only DTOs served by [com.nikichxp.mtracker.api.StatsController] out of the stored domain data. */
 @Service
 @Transactional(readOnly = true)
 class StatsService(
@@ -31,18 +30,15 @@ class StatsService(
 ) {
 
     fun overview(): List<PlayerOverviewDto> {
-        val players = playerRepository.findAll()
+        val players = playerRepository
+            .findByRioScoreGreaterThan(MIN_RIO_THRESHOLD)
+            .sortedByDescending { it.rioScore }
         val allCharacterKeys = players.flatMap { it.characterKeys }.toSet()
         val charactersByKey = characterRepository.findByCharacterKeyIn(allCharacterKeys).associateBy { it.characterKey }
         val buddyScoreByPlayerId = buddyScores(players)
         return players.map { toOverview(it, charactersByKey, buddyScoreByPlayerId[it.id]) }
     }
 
-    /**
-     * For each of [players], averages, over every stored run one of their characters appeared in,
-     * the share of that run's roster made up of *other* tracked players. Players with no stored
-     * runs are omitted (surfaced as `null` buddyScore).
-     */
     private fun buddyScores(players: List<Player>): Map<Long, Double> {
         val playerIds = players.mapNotNull { it.id }
         if (playerIds.isEmpty()) return emptyMap()
@@ -190,4 +186,8 @@ class StatsService(
         },
         lastSyncedAt = character.lastSyncedAt,
     )
+
+    companion object {
+        private const val MIN_RIO_THRESHOLD = 1.0
+    }
 }

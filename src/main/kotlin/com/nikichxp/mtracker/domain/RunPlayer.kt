@@ -60,6 +60,9 @@ interface RunPlayerRepository : JpaRepository<RunPlayer, Long> {
     fun findByCharacterKey(characterKey: String): List<RunPlayer>
     fun findByRunIdIn(runIds: Collection<Long>): List<RunPlayer>
 
+    /** Every roster slot that resolved to one of [playerIds] (i.e. that player's own appearances in stored runs). */
+    fun findByPlayerIdIn(playerIds: Collection<Long>): List<RunPlayer>
+
     /** The most recent runs played by any of [characterKeys] (one row per character per run), newest first. */
     @Query(
         "select rp from RunPlayer rp where rp.characterKey in :characterKeys order by rp.run.completedAt desc"

@@ -16,6 +16,12 @@ data class PlayerOverviewDto(
     val activeSpecRole: String?,
     val characterCount: Int,
     val lastSyncedAt: Instant?,
+    /**
+     * Average, across this player's stored runs, of the share of the roster made up of *other*
+     * tracked players (0 = always pugs, 1 = always full pre-made with the tracked roster).
+     * `null` when no runs are stored for this player yet.
+     */
+    val buddyScore: Double?,
 )
 
 data class CharacterDto(

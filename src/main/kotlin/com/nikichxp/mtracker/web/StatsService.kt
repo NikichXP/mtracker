@@ -34,7 +34,37 @@ class StatsService(
         val players = playerRepository.findAll()
         val allCharacterKeys = players.flatMap { it.characterKeys }.toSet()
         val charactersByKey = characterRepository.findByCharacterKeyIn(allCharacterKeys).associateBy { it.characterKey }
-        return players.map { toOverview(it, charactersByKey) }
+        val buddyScoreByPlayerId = buddyScores(players)
+        return players.map { toOverview(it, charactersByKey, buddyScoreByPlayerId[it.id]) }
+    }
+
+    /**
+     * For each of [players], averages, over every stored run one of their characters appeared in,
+     * the share of that run's roster made up of *other* tracked players. Players with no stored
+     * runs are omitted (surfaced as `null` buddyScore).
+     */
+    private fun buddyScores(players: List<Player>): Map<Long, Double> {
+        val playerIds = players.mapNotNull { it.id }
+        if (playerIds.isEmpty()) return emptyMap()
+
+        val ownAppearances = runPlayerRepository.findByPlayerIdIn(playerIds)
+        if (ownAppearances.isEmpty()) return emptyMap()
+
+        val runIds = ownAppearances.mapNotNull { it.run.id }.distinct()
+        val rosterByRunId = runPlayerRepository.findByRunIdIn(runIds).groupBy { it.run.id }
+
+        return ownAppearances
+            .groupBy { requireNotNull(requireNotNull(it.player).id) }
+            .mapNotNull { (playerId, appearances) ->
+                val ratios = appearances.distinctBy { it.run.id }.mapNotNull { appearance ->
+                    val roster = rosterByRunId[appearance.run.id]
+                    if (roster.isNullOrEmpty()) return@mapNotNull null
+                    val otherBuddies = roster.count { member -> member.player?.id?.let { it != playerId } == true }
+                    otherBuddies.toDouble() / roster.size
+                }
+                if (ratios.isEmpty()) null else playerId to ratios.average()
+            }
+            .toMap()
     }
 
     fun playerDetail(playerKey: String): PlayerDetailDto? {
@@ -120,7 +150,7 @@ class StatsService(
     fun availableWeeks(): List<String> =
         weeklySnapshotRepository.findDistinctWeekKeys()
 
-    private fun toOverview(player: Player, charactersByKey: Map<String, Character>): PlayerOverviewDto {
+    private fun toOverview(player: Player, charactersByKey: Map<String, Character>, buddyScore: Double?): PlayerOverviewDto {
         val characters = player.characterKeys.mapNotNull { charactersByKey[it] }
         val bestCharacter = characters.maxByOrNull { it.mythicPlusScore ?: 0.0 }
         return PlayerOverviewDto(
@@ -136,6 +166,7 @@ class StatsService(
             activeSpecRole = bestCharacter?.activeSpecRole,
             characterCount = characters.size,
             lastSyncedAt = characters.mapNotNull { it.lastSyncedAt }.maxOrNull(),
+            buddyScore = buddyScore,
         )
     }
 

@@ -16,6 +16,9 @@ Feature: Sync and Stats API
     And the overview contains player "Arthas-Gordunni" with totalScore 2850.5 weeklyRuns 2 maxItemLevel 635.5 role "TANK"
     And the overview contains player "Jaina-Gordunni" with totalScore 2720.0 weeklyRuns 1 maxItemLevel 630.0 role "DPS"
     And the overview contains player "Illidan-Ravencrest" with displayName "Illidan" totalScore 3050.0 weeklyRuns 2 maxItemLevel 639.0 characterCount 2
+    And the overview contains player "Arthas-Gordunni" with buddyScore 0.2
+    And the overview contains player "Jaina-Gordunni" with buddyScore 0.2
+    And the overview contains player "Illidan-Ravencrest" with buddyScore 0.0
 
   Scenario: Verify player detail endpoint returns character runs from stubs
     Given a sync is triggered

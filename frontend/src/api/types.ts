@@ -16,6 +16,7 @@ export interface PlayerOverviewDto {
   activeSpecRole: string | null;
   characterCount: number;
   lastSyncedAt: string | null;
+  buddyScore: number | null;
 }
 
 export interface DungeonRunDto {

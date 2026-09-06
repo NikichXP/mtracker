@@ -349,6 +349,14 @@ class StepDefinitions(
         assertThat(member.player).isNull()
     }
 
+    @Then("the overview contains player {string} with buddyScore {double}")
+    fun assertOverviewBuddyScore(playerKey: String, buddyScore: Double) {
+        val list = objectMapper.readValue<List<PlayerOverviewDto>>(lastResponseBody)
+        val item = list.firstOrNull { it.playerKey == playerKey }
+        assertThat(item).isNotNull
+        assertThat(item!!.buddyScore).isEqualTo(buddyScore)
+    }
+
     @Then("player {string} has rioScore {double} and next update scheduled")
     fun assertPlayerSchedule(playerKey: String, rioScore: Double) {
         val player = playerRepository.findByPlayerKey(playerKey)

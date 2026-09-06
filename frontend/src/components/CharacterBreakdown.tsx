@@ -8,8 +8,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
 import { usePlayerDetail } from "../hooks/usePlayerDetail";
 import { RoleBadge } from "./RoleBadge";
+import { RecentRunsPanel } from "./RecentRunsPanel";
 import { formatRelative } from "../utils/formatDate";
 import type { DungeonRunDto } from "../api/types";
 
@@ -103,6 +105,12 @@ export function CharacterBreakdown({ playerKey }: Props) {
           ))}
         </TableBody>
       </Table>
+
+      <Divider sx={{ my: 2 }} />
+      <Typography variant="subtitle2" sx={{ px: 2, mb: 1 }}>
+        Recent Runs
+      </Typography>
+      <RecentRunsPanel playerKey={playerKey} />
     </Box>
   );
 }

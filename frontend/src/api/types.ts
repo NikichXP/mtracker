@@ -54,3 +54,33 @@ export interface WeeklyPlayerStatsDto {
   weeklyHighestLevel: number;
   totalScore: number;
 }
+
+/** One of the 5 roster members of a `RecentRunDto`, snapshotted at the time the run was fetched. */
+export interface RunRosterMemberDto {
+  characterKey: string;
+  name: string;
+  realm: string;
+  characterClass: string | null;
+  spec: string | null;
+  role: string | null;
+  guildName: string | null;
+  itemLevel: number | null;
+  rioScore: number | null;
+  isTrackedPlayer: boolean;
+  playerKey: string | null;
+}
+
+/** Row of `/api/v1/stats/players/{playerKey}/runs`: a stored keystone run with its full roster. */
+export interface RecentRunDto {
+  season: string;
+  keystoneRunId: number;
+  dungeonName: string;
+  dungeonShortName: string | null;
+  mythicLevel: number;
+  score: number | null;
+  timed: boolean;
+  numKeystoneUpgrades: number;
+  completedAt: string | null;
+  url: string | null;
+  roster: RunRosterMemberDto[];
+}

@@ -36,6 +36,12 @@ Feature: Sync and Stats API
     And player "Arthas-Gordunni" has rioScore 2850.5 and next update scheduled
     And player "Illidan-Ravencrest" has rioScore 3050.0 and next update scheduled
 
+  Scenario: Recent runs endpoint returns stored runs with full roster
+    Given a sync is triggered
+    When a user gets recent runs for "Arthas-Gordunni"
+    Then the response status should be 200
+    And recent run 22345 in season "season-tww-1" has 5 roster members including a tracked player
+
   Scenario: Verify weekly stats and available weeks
     Given a sync is triggered
     When a user gets available weeks

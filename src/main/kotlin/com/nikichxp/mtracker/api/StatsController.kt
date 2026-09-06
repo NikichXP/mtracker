@@ -3,6 +3,7 @@ package com.nikichxp.mtracker.api
 import com.nikichxp.mtracker.web.StatsService
 import com.nikichxp.mtracker.web.dto.PlayerDetailDto
 import com.nikichxp.mtracker.web.dto.PlayerOverviewDto
+import com.nikichxp.mtracker.web.dto.RecentRunDto
 import com.nikichxp.mtracker.web.dto.WeeklyPlayerStatsDto
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +24,11 @@ class StatsController(private val statsService: StatsService) {
     @GetMapping("/players/{playerKey}")
     fun playerDetail(@PathVariable playerKey: String): PlayerDetailDto =
         statsService.playerDetail(playerKey)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown player: $playerKey")
+
+    @GetMapping("/players/{playerKey}/runs")
+    fun recentRuns(@PathVariable playerKey: String): List<RecentRunDto> =
+        statsService.recentRuns(playerKey)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown player: $playerKey")
 
     @GetMapping("/weekly")

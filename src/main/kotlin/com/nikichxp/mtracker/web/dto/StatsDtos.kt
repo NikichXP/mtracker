@@ -53,3 +53,33 @@ data class WeeklyPlayerStatsDto(
     val weeklyHighestLevel: Int,
     val totalScore: Double,
 )
+
+/** One of the 5 roster members of a [RecentRunDto], as snapshotted at the time the run was fetched. */
+data class RunRosterMemberDto(
+    val characterKey: String,
+    val name: String,
+    val realm: String,
+    val characterClass: String?,
+    val spec: String?,
+    val role: String?,
+    val guildName: String?,
+    val itemLevel: Double?,
+    val rioScore: Double?,
+    @get:JsonProperty("isTrackedPlayer") @param:JsonProperty("isTrackedPlayer") val isTrackedPlayer: Boolean,
+    val playerKey: String?,
+)
+
+/** A single Mythic+ keystone run played by (one of the characters of) a player, with its full roster. */
+data class RecentRunDto(
+    val season: String,
+    val keystoneRunId: Long,
+    val dungeonName: String,
+    val dungeonShortName: String?,
+    val mythicLevel: Int,
+    val score: Double?,
+    @JsonProperty("timed") val timed: Boolean,
+    val numKeystoneUpgrades: Int,
+    val completedAt: Instant?,
+    val url: String?,
+    val roster: List<RunRosterMemberDto>,
+)

@@ -15,6 +15,7 @@ import com.nikichxp.mtracker.web.dto.CharacterDto
 import com.nikichxp.mtracker.web.dto.GuildRequest
 import com.nikichxp.mtracker.web.dto.PlayerDetailDto
 import com.nikichxp.mtracker.web.dto.PlayerOverviewDto
+import com.nikichxp.mtracker.web.dto.RecentRunDto
 import com.nikichxp.mtracker.web.dto.TrackedGuildDto
 import com.nikichxp.mtracker.web.dto.TrackedPlayerDto
 import com.nikichxp.mtracker.web.dto.TrackedPlayerRequest
@@ -264,6 +265,31 @@ class StepDefinitions(
         assertThat(char.activeSpecRole).isEqualTo(role)
         assertThat(char.mythicPlusScore).isEqualTo(score)
         assertThat(char.weeklyRuns).hasSize(weeklyRuns)
+    }
+
+    @When("a user gets recent runs for {string}")
+    fun userGetsRecentRuns(playerKey: String) {
+        val result = webTestClient.get()
+            .uri("/api/v1/stats/players/$playerKey/runs")
+            .exchange()
+            .expectBody(String::class.java)
+            .returnResult()
+        captureResult(result)
+    }
+
+    @Then("the recent runs response has {int} runs")
+    fun assertRecentRunsCount(count: Int) {
+        val list = objectMapper.readValue<List<RecentRunDto>>(lastResponseBody)
+        assertThat(list).hasSize(count)
+    }
+
+    @Then("recent run {long} in season {string} has {int} roster members including a tracked player")
+    fun assertRecentRunRoster(keystoneRunId: Long, season: String, rosterSize: Int) {
+        val list = objectMapper.readValue<List<RecentRunDto>>(lastResponseBody)
+        val run = list.firstOrNull { it.keystoneRunId == keystoneRunId && it.season == season }
+        assertThat(run).isNotNull
+        assertThat(run!!.roster).hasSize(rosterSize)
+        assertThat(run.roster.any { it.isTrackedPlayer && it.playerKey != null }).isTrue()
     }
 
     @When("a user gets available weeks")

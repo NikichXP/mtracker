@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import type { PlayerDetailDto, PlayerOverviewDto, WeeklyPlayerStatsDto } from "./types";
+import type { PlayerDetailDto, PlayerOverviewDto, RecentRunDto, WeeklyPlayerStatsDto } from "./types";
 
 export async function fetchPlayersOverview(): Promise<PlayerOverviewDto[]> {
   const { data } = await apiClient.get<PlayerOverviewDto[]>("/api/v1/stats/overview");
@@ -8,6 +8,13 @@ export async function fetchPlayersOverview(): Promise<PlayerOverviewDto[]> {
 
 export async function fetchPlayerDetail(playerKey: string): Promise<PlayerDetailDto> {
   const { data } = await apiClient.get<PlayerDetailDto>(`/api/v1/stats/players/${encodeURIComponent(playerKey)}`);
+  return data;
+}
+
+export async function fetchRecentRuns(playerKey: string): Promise<RecentRunDto[]> {
+  const { data } = await apiClient.get<RecentRunDto[]>(
+    `/api/v1/stats/players/${encodeURIComponent(playerKey)}/runs`,
+  );
   return data;
 }
 

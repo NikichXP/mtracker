@@ -4,13 +4,19 @@ import com.nikichxp.mtracker.domain.Character
 import com.nikichxp.mtracker.domain.CharacterRepository
 import com.nikichxp.mtracker.domain.Player
 import com.nikichxp.mtracker.domain.PlayerRepository
+import com.nikichxp.mtracker.domain.Run
+import com.nikichxp.mtracker.domain.RunPlayer
+import com.nikichxp.mtracker.domain.RunPlayerRepository
 import com.nikichxp.mtracker.domain.WeekKeyCalculator
 import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
 import com.nikichxp.mtracker.web.dto.CharacterDto
 import com.nikichxp.mtracker.web.dto.DungeonRunDto
 import com.nikichxp.mtracker.web.dto.PlayerDetailDto
 import com.nikichxp.mtracker.web.dto.PlayerOverviewDto
+import com.nikichxp.mtracker.web.dto.RecentRunDto
+import com.nikichxp.mtracker.web.dto.RunRosterMemberDto
 import com.nikichxp.mtracker.web.dto.WeeklyPlayerStatsDto
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,6 +27,7 @@ class StatsService(
     private val playerRepository: PlayerRepository,
     private val characterRepository: CharacterRepository,
     private val weeklySnapshotRepository: WeeklySnapshotRepository,
+    private val runPlayerRepository: RunPlayerRepository,
 ) {
 
     fun overview(): List<PlayerOverviewDto> {
@@ -39,6 +46,51 @@ class StatsService(
             characters = characters.map(::toCharacterDto),
         )
     }
+
+    /** Most recent stored Mythic+ runs played by any of [playerKey]'s characters, newest first, with full roster. */
+    fun recentRuns(playerKey: String, limit: Int = 10): List<RecentRunDto>? {
+        val player = playerRepository.findByPlayerKey(playerKey) ?: return null
+        if (player.characterKeys.isEmpty()) return emptyList()
+
+        val ownRuns = runPlayerRepository.findRecentByCharacterKeyIn(player.characterKeys, PageRequest.of(0, limit))
+        if (ownRuns.isEmpty()) return emptyList()
+
+        val runIds = ownRuns.mapNotNull { it.run.id }.distinct()
+        val rosterByRunId = runPlayerRepository.findByRunIdIn(runIds).groupBy { it.run.id }
+
+        return ownRuns
+            .distinctBy { it.run.id }
+            .sortedByDescending { it.run.completedAt }
+            .map { toRecentRunDto(it.run, rosterByRunId[it.run.id].orEmpty()) }
+    }
+
+    private fun toRecentRunDto(run: Run, roster: List<RunPlayer>) = RecentRunDto(
+        season = run.season,
+        keystoneRunId = run.keystoneRunId,
+        dungeonName = run.dungeonName,
+        dungeonShortName = run.dungeonShortName,
+        mythicLevel = run.mythicLevel,
+        score = run.score,
+        timed = run.timed,
+        numKeystoneUpgrades = run.numKeystoneUpgrades,
+        completedAt = run.completedAt,
+        url = run.url,
+        roster = roster.map { member ->
+            RunRosterMemberDto(
+                characterKey = member.characterKey,
+                name = member.name,
+                realm = member.realm,
+                characterClass = member.characterClass,
+                spec = member.spec,
+                role = member.role,
+                guildName = member.guildName,
+                itemLevel = member.itemLevel,
+                rioScore = member.rioScore,
+                isTrackedPlayer = member.player != null,
+                playerKey = member.player?.playerKey,
+            )
+        },
+    )
 
     fun weeklyStats(weekKey: String?): List<WeeklyPlayerStatsDto> {
         val effectiveWeekKey = weekKey ?: WeekKeyCalculator.currentWeekKey()

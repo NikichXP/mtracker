@@ -11,7 +11,10 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 
 /**
  * One roster member of a [Run] (5 rows per run). Stores a snapshot of the character's state
@@ -56,4 +59,10 @@ data class RunPlayer(
 interface RunPlayerRepository : JpaRepository<RunPlayer, Long> {
     fun findByCharacterKey(characterKey: String): List<RunPlayer>
     fun findByRunIdIn(runIds: Collection<Long>): List<RunPlayer>
+
+    /** The most recent runs played by any of [characterKeys] (one row per character per run), newest first. */
+    @Query(
+        "select rp from RunPlayer rp where rp.characterKey in :characterKeys order by rp.run.completedAt desc"
+    )
+    fun findRecentByCharacterKeyIn(@Param("characterKeys") characterKeys: Collection<String>, pageable: Pageable): List<RunPlayer>
 }

@@ -28,7 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

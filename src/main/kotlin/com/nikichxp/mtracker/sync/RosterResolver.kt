@@ -1,7 +1,7 @@
 package com.nikichxp.mtracker.sync
 
-import com.nikichxp.mtracker.domain.TrackedGuildRepository
-import com.nikichxp.mtracker.domain.TrackedPlayerRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedGuildRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedPlayerRepository
 import com.nikichxp.mtracker.raiderio.IRaiderIoService
 import org.springframework.stereotype.Component
 

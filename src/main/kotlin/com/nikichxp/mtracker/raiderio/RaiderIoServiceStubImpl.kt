@@ -5,6 +5,10 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.GuildMemberDto
 import com.nikichxp.mtracker.raiderio.dto.GuildProfileDto
+import com.nikichxp.mtracker.raiderio.dto.MythicPlusStaticDataDto
+import com.nikichxp.mtracker.raiderio.dto.RaidingStaticDataDto
+import com.nikichxp.mtracker.raiderio.dto.RankingsBodyDto
+import com.nikichxp.mtracker.raiderio.dto.RankingsResponseDto
 import com.nikichxp.mtracker.raiderio.dto.RunDetailsDto
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -76,6 +80,54 @@ class RaiderIoServiceStubImpl(
             objectMapper.readValue<RunDetailsDto>(content)
         } catch (e: Exception) {
             log.error("Failed to deserialize stub $candidate", e)
+            null
+        }
+    }
+
+    override suspend fun fetchGearProfile(name: String, realm: String): CharacterProfileDto? {
+        val candidates = listOf(
+            "stubs/gear-profiles/$name-$realm.json",
+            "stubs/gear-profiles/${name.lowercase()}-${realm.lowercase()}.json",
+            "stubs/gear-profiles/$name.json",
+            "stubs/gear-profiles/${name.lowercase()}.json",
+        )
+        for (candidate in candidates) {
+            val content = readStubContent(candidate)
+            if (content != null) {
+                return try {
+                    objectMapper.readValue<CharacterProfileDto>(content)
+                } catch (e: Exception) {
+                    log.error("Failed to deserialize stub $candidate", e)
+                    null
+                }
+            }
+        }
+        log.warn("No stub found for gear profile {}-{} in candidates: {}", name, realm, candidates)
+        return null
+    }
+
+    override suspend fun fetchSpecRankings(season: String, classSlug: String, page: Int): RankingsBodyDto? {
+        return readStubJson<RankingsResponseDto>("stubs/rankings/$season-$classSlug-$page.json")?.rankings
+    }
+
+    override suspend fun fetchMythicPlusStaticData(expansionId: Int): MythicPlusStaticDataDto? {
+        return readStubJson<MythicPlusStaticDataDto>("stubs/static/mythic-plus-$expansionId.json")
+    }
+
+    override suspend fun fetchRaidingStaticData(expansionId: Int): RaidingStaticDataDto? {
+        return readStubJson<RaidingStaticDataDto>("stubs/static/raiding-$expansionId.json")
+    }
+
+    private inline fun <reified T> readStubJson(path: String): T? {
+        val content = readStubContent(path)
+        if (content == null) {
+            log.warn("No stub found at {}", path)
+            return null
+        }
+        return try {
+            objectMapper.readValue<T>(content)
+        } catch (e: Exception) {
+            log.error("Failed to deserialize stub $path", e)
             null
         }
     }

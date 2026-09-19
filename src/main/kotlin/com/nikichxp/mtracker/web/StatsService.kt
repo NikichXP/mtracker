@@ -1,14 +1,14 @@
 package com.nikichxp.mtracker.web
 
-import com.nikichxp.mtracker.domain.Character
-import com.nikichxp.mtracker.domain.CharacterRepository
-import com.nikichxp.mtracker.domain.Player
-import com.nikichxp.mtracker.domain.PlayerRepository
-import com.nikichxp.mtracker.domain.Run
-import com.nikichxp.mtracker.domain.RunPlayer
-import com.nikichxp.mtracker.domain.RunPlayerRepository
-import com.nikichxp.mtracker.domain.WeekKeyCalculator
-import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
+import com.nikichxp.mtracker.domain.character.Character
+import com.nikichxp.mtracker.domain.character.CharacterRepository
+import com.nikichxp.mtracker.domain.player.Player
+import com.nikichxp.mtracker.domain.player.PlayerRepository
+import com.nikichxp.mtracker.domain.run.Run
+import com.nikichxp.mtracker.domain.run.RunPlayer
+import com.nikichxp.mtracker.domain.run.RunPlayerRepository
+import com.nikichxp.mtracker.domain.weekly.WeekKeyCalculator
+import com.nikichxp.mtracker.domain.weekly.WeeklySnapshotRepository
 import com.nikichxp.mtracker.web.dto.CharacterDto
 import com.nikichxp.mtracker.web.dto.DungeonRunDto
 import com.nikichxp.mtracker.web.dto.PlayerDetailDto

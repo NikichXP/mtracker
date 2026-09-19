@@ -1,0 +1,7 @@
+package com.nikichxp.mtracker.domain.topgear
+
+enum class StatType {
+    STRENGTH, AGILITY, INTELLECT, STAMINA, CRITICAL_STRIKE, HASTE, MASTERY, VERSATILITY, SPEED, LEECH, AVOIDANCE, ARMOR
+}
+
+enum class GearSource { CRAFTED, RAID, KEYS, SET, VENDOR, QUEST, PVP, WORLD, UNKNOWN }

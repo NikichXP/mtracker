@@ -1,11 +1,11 @@
 package com.nikichxp.mtracker.sync
 
-import com.nikichxp.mtracker.domain.Player
-import com.nikichxp.mtracker.domain.Run
-import com.nikichxp.mtracker.domain.RunPlayer
-import com.nikichxp.mtracker.domain.RunPlayerRepository
-import com.nikichxp.mtracker.domain.RunRepository
-import com.nikichxp.mtracker.domain.PlayerRepository
+import com.nikichxp.mtracker.domain.player.Player
+import com.nikichxp.mtracker.domain.run.Run
+import com.nikichxp.mtracker.domain.run.RunPlayer
+import com.nikichxp.mtracker.domain.run.RunPlayerRepository
+import com.nikichxp.mtracker.domain.run.RunRepository
+import com.nikichxp.mtracker.domain.player.PlayerRepository
 import com.nikichxp.mtracker.raiderio.IRaiderIoService
 import com.nikichxp.mtracker.raiderio.dto.KeystoneRunDto
 import com.nikichxp.mtracker.raiderio.dto.RunDetailsDto

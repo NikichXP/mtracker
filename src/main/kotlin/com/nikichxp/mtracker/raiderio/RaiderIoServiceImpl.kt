@@ -4,6 +4,10 @@ import com.nikichxp.mtracker.config.MtrackerProperties
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.GuildMemberDto
 import com.nikichxp.mtracker.raiderio.dto.GuildProfileDto
+import com.nikichxp.mtracker.raiderio.dto.MythicPlusStaticDataDto
+import com.nikichxp.mtracker.raiderio.dto.RaidingStaticDataDto
+import com.nikichxp.mtracker.raiderio.dto.RankingsBodyDto
+import com.nikichxp.mtracker.raiderio.dto.RankingsResponseDto
 import com.nikichxp.mtracker.raiderio.dto.RunDetailsDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -109,6 +113,112 @@ class RaiderIoServiceImpl(
             }
         } catch (e: Exception) {
             log.warn("Failed to fetch run details for {}/{}: {}", season, keystoneRunId, e.message)
+            null
+        }
+    }
+
+    private val gearProfileFields = listOf(
+        "gear",
+        "talents",
+        "mythic_plus_best_runs:all",
+        "mythic_plus_scores_by_season:current",
+    ).joinToString(",")
+
+    override suspend fun fetchGearProfile(name: String, realm: String): CharacterProfileDto? {
+        return try {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/characters/profile") {
+                parameter("region", region)
+                parameter("realm", realm)
+                parameter("name", name)
+                parameter("fields", gearProfileFields)
+            }
+            if (response.status.isSuccess()) {
+                response.body<CharacterProfileDto>()
+            } else {
+                log.warn(
+                    "Failed to fetch gear profile for {}-{}: {} {}",
+                    name,
+                    realm,
+                    response.status.value,
+                    response.status.description
+                )
+                null
+            }
+        } catch (e: Exception) {
+            log.warn("Failed to fetch gear profile for {}-{}: {}", name, realm, e.message)
+            null
+        }
+    }
+
+    override suspend fun fetchSpecRankings(season: String, classSlug: String, page: Int): RankingsBodyDto? {
+        return try {
+            val response =
+                invokeCall("${props.raiderio.rankingsBaseUrl.trimEnd('/')}/mythic-plus/rankings/characters") {
+                    parameter("region", region)
+                    parameter("season", season)
+                    parameter("class", classSlug)
+                    parameter("role", "all")
+                    parameter("page", page)
+                }
+            if (response.status.isSuccess()) {
+                response.body<RankingsResponseDto>().rankings
+            } else {
+                log.warn(
+                    "Failed to fetch spec rankings for {}/{}/{}: {} {}",
+                    season,
+                    classSlug,
+                    page,
+                    response.status.value,
+                    response.status.description
+                )
+                null
+            }
+        } catch (e: Exception) {
+            log.warn("Failed to fetch spec rankings for {}/{}/{}: {}", season, classSlug, page, e.message)
+            null
+        }
+    }
+
+    override suspend fun fetchMythicPlusStaticData(expansionId: Int): MythicPlusStaticDataDto? {
+        return try {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/mythic-plus/static-data") {
+                parameter("expansion_id", expansionId)
+            }
+            if (response.status.isSuccess()) {
+                response.body<MythicPlusStaticDataDto>()
+            } else {
+                log.warn(
+                    "Failed to fetch mythic-plus static data for expansion {}: {} {}",
+                    expansionId,
+                    response.status.value,
+                    response.status.description
+                )
+                null
+            }
+        } catch (e: Exception) {
+            log.warn("Failed to fetch mythic-plus static data for expansion {}: {}", expansionId, e.message)
+            null
+        }
+    }
+
+    override suspend fun fetchRaidingStaticData(expansionId: Int): RaidingStaticDataDto? {
+        return try {
+            val response = invokeCall("${props.raiderio.baseUrl.trimEnd('/')}/raiding/static-data") {
+                parameter("expansion_id", expansionId)
+            }
+            if (response.status.isSuccess()) {
+                response.body<RaidingStaticDataDto>()
+            } else {
+                log.warn(
+                    "Failed to fetch raiding static data for expansion {}: {} {}",
+                    expansionId,
+                    response.status.value,
+                    response.status.description
+                )
+                null
+            }
+        } catch (e: Exception) {
+            log.warn("Failed to fetch raiding static data for expansion {}: {}", expansionId, e.message)
             null
         }
     }

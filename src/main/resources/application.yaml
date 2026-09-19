@@ -42,9 +42,31 @@ mtracker:
     batch-size: ${MTRACKER_SYNC_BATCH_SIZE:10}
     request-delay:
       raider.io: 50
+      wowhead: 100
     default-delay: 100
   raiderio:
     base-url: ${RAIDERIO_BASE_URL:https://raider.io/api/v1}
+    rankings-base-url: ${RAIDERIO_RANKINGS_BASE_URL:https://raider.io/api}
+  top-gear:
+    enabled: ${MTRACKER_TOP_GEAR_ENABLED:true}
+    scheduler-enabled: ${MTRACKER_TOP_GEAR_SCHEDULER_ENABLED:true}
+    expansion-id: ${MTRACKER_TOP_GEAR_EXPANSION_ID:11}
+    percentile: ${MTRACKER_TOP_GEAR_PERCENTILE:5.0}
+    max-per-spec: ${MTRACKER_TOP_GEAR_MAX_PER_SPEC:200}
+    max-pages-per-class: ${MTRACKER_TOP_GEAR_MAX_PAGES_PER_CLASS:60}
+    min-pages-per-class: ${MTRACKER_TOP_GEAR_MIN_PAGES_PER_CLASS:10}
+    top-items-per-slot: ${MTRACKER_TOP_GEAR_TOP_ITEMS_PER_SLOT:5}
+    producer-interval-hours: ${MTRACKER_TOP_GEAR_PRODUCER_INTERVAL_HOURS:24}
+    scan-poll-interval-ms: ${MTRACKER_TOP_GEAR_SCAN_POLL_INTERVAL_MS:30000}
+    scan-batch-size: ${MTRACKER_TOP_GEAR_SCAN_BATCH_SIZE:20}
+    max-runs-per-character: ${MTRACKER_TOP_GEAR_MAX_RUNS_PER_CHARACTER:8}
+    max-scan-attempts: ${MTRACKER_TOP_GEAR_MAX_SCAN_ATTEMPTS:3}
+    claim-timeout-minutes: ${MTRACKER_TOP_GEAR_CLAIM_TIMEOUT_MINUTES:15}
+    retention-hours: ${MTRACKER_TOP_GEAR_RETENTION_HOURS:72}
+    cleanup-interval-hours: ${MTRACKER_TOP_GEAR_CLEANUP_INTERVAL_HOURS:1}
+  wowhead:
+    base-url: ${WOWHEAD_BASE_URL:https://www.wowhead.com}
+    tooltip-base-url: ${WOWHEAD_TOOLTIP_BASE_URL:https://nether.wowhead.com}
   s2s:
     token: ${MTRACKER_S2S_TOKEN:}
   admin:

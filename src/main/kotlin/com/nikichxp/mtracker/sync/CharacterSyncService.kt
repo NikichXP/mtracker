@@ -1,12 +1,12 @@
 package com.nikichxp.mtracker.sync
 
-import com.nikichxp.mtracker.domain.Character
-import com.nikichxp.mtracker.domain.CharacterRepository
-import com.nikichxp.mtracker.domain.CharacterSource
-import com.nikichxp.mtracker.domain.DungeonRun
-import com.nikichxp.mtracker.domain.WeekKeyCalculator
-import com.nikichxp.mtracker.domain.WeeklySnapshot
-import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
+import com.nikichxp.mtracker.domain.character.Character
+import com.nikichxp.mtracker.domain.character.CharacterRepository
+import com.nikichxp.mtracker.domain.character.CharacterSource
+import com.nikichxp.mtracker.domain.character.DungeonRun
+import com.nikichxp.mtracker.domain.weekly.WeekKeyCalculator
+import com.nikichxp.mtracker.domain.weekly.WeeklySnapshot
+import com.nikichxp.mtracker.domain.weekly.WeeklySnapshotRepository
 import com.nikichxp.mtracker.raiderio.IRaiderIoService
 import com.nikichxp.mtracker.raiderio.dto.CharacterProfileDto
 import com.nikichxp.mtracker.raiderio.dto.KeystoneRunDto

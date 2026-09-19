@@ -1,0 +1,44 @@
+{
+ "name": "Scanchi",
+ "realm": "Gordunni",
+ "class": "Monk",
+ "active_spec_name": "Windwalker",
+ "active_spec_role": "DPS",
+ "gear": {
+  "item_level_equipped": 250.0,
+  "items": {}
+ },
+ "talentLoadout": {
+  "loadout_spec_id": 269,
+  "loadout_text": "PROFILE_TALENT_WW"
+ },
+ "mythic_plus_best_runs": [
+  {
+   "dungeon": "Den of Nalorakk",
+   "short_name": "DON",
+   "mythic_level": 22,
+   "completed_at": "2026-09-10T10:00:00Z",
+   "clear_time_ms": 1803113,
+   "score": 517.3,
+   "num_keystone_upgrades": 1,
+   "url": "https://raider.io/mythic-plus-runs/season-mn-2/9001-22-den-of-nalorakk",
+   "spec": { "id": 269, "name": "Windwalker", "slug": "windwalker", "role": "dps" },
+   "role": "dps"
+  },
+  {
+   "dungeon": "The Stonevault",
+   "short_name": "SV",
+   "mythic_level": 20,
+   "completed_at": "2026-09-09T10:00:00Z",
+   "clear_time_ms": 1650000,
+   "score": 490.1,
+   "num_keystone_upgrades": 1,
+   "url": "https://raider.io/mythic-plus-runs/season-mn-2/9002-20-the-stonevault",
+   "spec": { "id": 269, "name": "Windwalker", "slug": "windwalker", "role": "dps" },
+   "role": "dps"
+  }
+ ],
+ "mythic_plus_scores_by_season": [
+  { "season": "season-mn-2", "scores": { "all": 4000.0 } }
+ ]
+}

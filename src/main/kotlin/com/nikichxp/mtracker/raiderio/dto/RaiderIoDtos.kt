@@ -22,6 +22,13 @@ data class CharacterProfileDto(
     @JsonProperty("mythic_plus_best_runs") val mythicPlusBestRuns: List<KeystoneRunDto> = emptyList(),
     @JsonProperty("mythic_plus_weekly_highest_level_runs")
     val mythicPlusWeeklyHighestLevelRuns: List<KeystoneRunDto> = emptyList(),
+    @JsonProperty("talentLoadout") val talentLoadout: TalentLoadoutDto? = null,
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class TalentLoadoutDto(
+    @JsonProperty("loadout_spec_id") val loadoutSpecId: Int? = null,
+    @JsonProperty("loadout_text") val loadoutText: String? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,6 +42,29 @@ data class GuildRefDto(
 data class GearDto(
     @JsonProperty("item_level_equipped") val itemLevelEquipped: Double? = null,
     @JsonProperty("item_level_total") val itemLevelTotal: Double? = null,
+    val items: Map<String, GearItemDto> = emptyMap(),
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class GearItemDto(
+    @JsonProperty("item_id") val itemId: Int = 0,
+    @JsonProperty("item_level") val itemLevel: Int = 0,
+    val name: String? = null,
+    @JsonProperty("item_quality") val itemQuality: Int? = null,
+    val icon: String? = null,
+    val tier: String? = null,
+    val bonuses: List<Int> = emptyList(),
+    val gems: List<Int> = emptyList(),
+    @JsonProperty("gems_detail") val gemsDetail: List<NamedIdDto> = emptyList(),
+    val enchants: List<Int> = emptyList(),
+    @JsonProperty("enchants_detail") val enchantsDetail: List<NamedIdDto> = emptyList(),
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class NamedIdDto(
+    val id: Int? = null,
+    val name: String? = null,
+    val icon: String? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -58,6 +88,9 @@ data class KeystoneRunDto(
     @JsonProperty("cleared_in_time") val clearedInTime: Boolean? = null,
     @JsonProperty("completed_at") val completedAt: Instant? = null,
     val url: String? = null,
+    val spec: RosterSpecDto? = null,
+    val role: String? = null,
+    @JsonProperty("short_name") val shortName: String? = null,
 )
 
 /** Response of `GET /mythic-plus/run-details?season=...&id=...`. Many fields intentionally unmapped. */
@@ -110,6 +143,7 @@ data class NamedSlugDto(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class RosterSpecDto(
+    val id: Int? = null,
     val name: String? = null,
     val slug: String? = null,
     val role: String? = null,
@@ -136,6 +170,7 @@ data class RosterGuildDto(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class RosterItemsDto(
     @JsonProperty("item_level_equipped") val itemLevelEquipped: Double? = null,
+    val items: Map<String, GearItemDto> = emptyMap(),
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,0 +1,43 @@
+{
+ "rankings": {
+  "rankedCharacters": [
+   {
+    "rank": 1,
+    "score": 3900.5,
+    "runs": [],
+    "character": {
+     "name": "Holyone",
+     "class": { "id": 5, "name": "Priest", "slug": "priest" },
+     "spec": { "id": 256, "name": "Discipline", "slug": "discipline", "class_id": 5, "role": "healer" },
+     "realm": { "name": "Gordunni", "slug": "gordunni" },
+     "region": { "slug": "eu" },
+     "talentLoadoutText": "TALENT_DISC_IMPORT"
+    },
+    "guild": { "name": "Bloodline" }
+   },
+   {
+    "rank": 7,
+    "score": 3700.25,
+    "runs": [],
+    "character": {
+     "name": "Holyone",
+     "class": { "id": 5, "name": "Priest", "slug": "priest" },
+     "spec": { "id": 257, "name": "Holy", "slug": "holy", "class_id": 5, "role": "healer" },
+     "realm": { "name": "Gordunni", "slug": "gordunni" },
+     "region": { "slug": "eu" },
+     "talentLoadoutText": "TALENT_HOLY_IMPORT"
+    },
+    "guild": { "name": "Bloodline" }
+   }
+  ],
+  "ui": {
+   "class": "priest",
+   "page": 0,
+   "region": "eu",
+   "role": "all",
+   "season": "season-mn-2",
+   "pageSize": 100,
+   "lastPage": 0
+  }
+ }
+}

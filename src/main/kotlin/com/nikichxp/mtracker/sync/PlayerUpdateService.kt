@@ -1,9 +1,9 @@
 package com.nikichxp.mtracker.sync
 
 import com.nikichxp.mtracker.config.MtrackerProperties
-import com.nikichxp.mtracker.domain.CharacterSource
-import com.nikichxp.mtracker.domain.Player
-import com.nikichxp.mtracker.domain.PlayerRepository
+import com.nikichxp.mtracker.domain.character.CharacterSource
+import com.nikichxp.mtracker.domain.player.Player
+import com.nikichxp.mtracker.domain.player.PlayerRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
@@ -43,9 +43,8 @@ class PlayerUpdateService(
         } catch (e: Exception) {
             log.error("Failed to update player {}", player.playerKey, e)
             // Push the retry into the future so one broken player cannot hot-loop the queue.
-            playerRepository.save(
-                player.copy(nextUpdateAt = Instant.now().plus(RETRY_DELAY))
-            )
+            player.nextUpdateAt = Instant.now().plus(RETRY_DELAY)
+            playerRepository.save(player)
         }
     }
 
@@ -62,13 +61,10 @@ class PlayerUpdateService(
         }
         // Keep the previously known score when every fetch failed, so scheduling stays stable.
         val effectiveScore = bestScore ?: player.rioScore
-        playerRepository.save(
-            player.copy(
-                rioScore = effectiveScore,
-                lastSyncedAt = Instant.now(),
-                nextUpdateAt = updateScheduleService.nextUpdateAt(effectiveScore),
-            )
-        )
+        player.rioScore = effectiveScore
+        player.lastSyncedAt = Instant.now()
+        player.nextUpdateAt = updateScheduleService.nextUpdateAt(effectiveScore)
+        playerRepository.save(player)
     }
 
     private fun inferSource(player: Player): CharacterSource = when {

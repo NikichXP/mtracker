@@ -3,13 +3,17 @@ package com.nikichxp.mtracker.cucumber
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.nikichxp.mtracker.domain.CharacterRepository
-import com.nikichxp.mtracker.domain.PlayerRepository
-import com.nikichxp.mtracker.domain.RunPlayerRepository
-import com.nikichxp.mtracker.domain.RunRepository
-import com.nikichxp.mtracker.domain.TrackedGuildRepository
-import com.nikichxp.mtracker.domain.TrackedPlayerRepository
-import com.nikichxp.mtracker.domain.WeeklySnapshotRepository
+import com.nikichxp.mtracker.domain.character.CharacterRepository
+import com.nikichxp.mtracker.domain.topgear.GearItemCatalogRepository
+import com.nikichxp.mtracker.domain.topgear.GearItemStatsRepository
+import com.nikichxp.mtracker.domain.topgear.GearSnapshotRepository
+import com.nikichxp.mtracker.domain.player.PlayerRepository
+import com.nikichxp.mtracker.domain.run.RunPlayerRepository
+import com.nikichxp.mtracker.domain.run.RunRepository
+import com.nikichxp.mtracker.domain.topgear.TopPlayerScanTaskRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedGuildRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedPlayerRepository
+import com.nikichxp.mtracker.domain.weekly.WeeklySnapshotRepository
 import com.nikichxp.mtracker.sync.SyncOrchestrator
 import com.nikichxp.mtracker.web.dto.CharacterDto
 import com.nikichxp.mtracker.web.dto.GuildRequest
@@ -43,6 +47,10 @@ class StepDefinitions(
     private val weeklySnapshotRepository: WeeklySnapshotRepository,
     private val runRepository: RunRepository,
     private val runPlayerRepository: RunPlayerRepository,
+    private val topPlayerScanTaskRepository: TopPlayerScanTaskRepository,
+    private val gearSnapshotRepository: GearSnapshotRepository,
+    private val gearItemCatalogRepository: GearItemCatalogRepository,
+    private val gearItemStatsRepository: GearItemStatsRepository,
 ) {
 
     private val webTestClient: WebTestClient by lazy {
@@ -56,6 +64,10 @@ class StepDefinitions(
 
     @Given("the database is cleaned")
     fun cleanDatabase() {
+        gearSnapshotRepository.deleteAll()
+        topPlayerScanTaskRepository.deleteAll()
+        gearItemCatalogRepository.deleteAll()
+        gearItemStatsRepository.deleteAll()
         runPlayerRepository.deleteAll()
         runRepository.deleteAll()
         weeklySnapshotRepository.deleteAll()

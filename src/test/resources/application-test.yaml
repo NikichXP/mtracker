@@ -20,6 +20,16 @@ mtracker:
   raiderio:
     stub:
       enabled: true
+  wowhead:
+    stub:
+      enabled: true
+  top-gear:
+    scheduler-enabled: false
+    max-per-spec: 10
+    max-pages-per-class: 2
+    min-pages-per-class: 1
+    scan-batch-size: 5
+    max-runs-per-character: 3
   admin:
     token: test-admin-token
   s2s:

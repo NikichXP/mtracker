@@ -1,7 +1,7 @@
 package com.nikichxp.mtracker.api
 
-import com.nikichxp.mtracker.domain.TrackedGuild
-import com.nikichxp.mtracker.domain.TrackedGuildRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedGuild
+import com.nikichxp.mtracker.domain.tracking.TrackedGuildRepository
 import com.nikichxp.mtracker.web.dto.GuildRequest
 import com.nikichxp.mtracker.web.dto.TrackedGuildDto
 import org.springframework.dao.DataIntegrityViolationException
@@ -43,7 +43,9 @@ class GuildAdminController(private val repository: TrackedGuildRepository) {
         val existing = findOrThrow(id)
         val (name, realm) = validated(request)
         return try {
-            toDto(repository.save(existing.copy(name = name, realm = realm)))
+            existing.name = name
+            existing.realm = realm
+            toDto(repository.save(existing))
         } catch (e: DataIntegrityViolationException) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Guild '$name-$realm' is already tracked", e)
         }

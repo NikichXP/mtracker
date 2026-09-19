@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicBoolean
 
-/** Frequently drains the queue of players whose [com.nikichxp.mtracker.domain.Player.nextUpdateAt] is due. */
+/** Frequently drains the queue of players whose [com.nikichxp.mtracker.domain.player.Player.nextUpdateAt] is due. */
 @Component
 class PlayerUpdateScheduler(private val playerUpdateService: PlayerUpdateService) {
     private val log = LoggerFactory.getLogger(javaClass)

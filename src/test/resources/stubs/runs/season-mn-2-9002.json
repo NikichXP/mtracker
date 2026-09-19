@@ -1,0 +1,457 @@
+{
+ "season": "season-mn-2",
+ "num_chests": 1,
+ "roster": [
+  {
+   "character": {
+    "name": "Scanchi",
+    "class": {
+     "name": "Monk",
+     "slug": "monk"
+    },
+    "spec": {
+     "id": 269,
+     "name": "Windwalker",
+     "slug": "windwalker",
+     "role": "dps"
+    },
+    "realm": {
+     "name": "Gordunni",
+     "slug": "gordunni"
+    },
+    "region": {
+     "name": "Europe",
+     "short_name": "EU",
+     "slug": "eu"
+    },
+    "faction": "horde"
+   },
+   "role": "dps",
+   "guild": {
+    "name": "Bloodline"
+   },
+   "items": {
+    "item_level_equipped": 250.0,
+    "items": {
+     "head": {
+      "item_id": 271517,
+      "item_level": 250,
+      "name": "Tassels of the Monkey King",
+      "item_quality": 4,
+      "icon": "inv_helm_leather",
+      "bonuses": [
+       1001
+      ],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": [],
+      "tier": "36"
+     },
+     "mainhand": {
+      "item_id": 268215,
+      "item_level": 250,
+      "name": "Abyssal Broodfiend's Bardiche",
+      "item_quality": 4,
+      "icon": "inv_polearm",
+      "bonuses": [
+       1002
+      ],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "finger1": {
+      "item_id": 240949,
+      "item_level": 250,
+      "name": "Masterwork Sin'dorei Band",
+      "item_quality": 4,
+      "icon": "inv_ring",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [
+       {
+        "id": 240906,
+        "name": "Flawless Quick Garnet",
+        "icon": "inv_gem"
+       }
+      ],
+      "enchants": [],
+      "enchants_detail": [
+       {
+        "id": 7001,
+        "name": "Radiant Critical Strike",
+        "icon": "inv_ench"
+       }
+      ]
+     },
+     "trinket1": {
+      "item_id": 251136,
+      "item_level": 250,
+      "name": "Signet of Snarling Servitude",
+      "item_quality": 4,
+      "icon": "inv_trinket",
+      "bonuses": [
+       1003
+      ],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     }
+    }
+   },
+   "ranks": {
+    "score": 4000.0
+   }
+  },
+  {
+   "character": {
+    "name": "Coheals",
+    "class": {
+     "name": "Priest",
+     "slug": "priest"
+    },
+    "spec": {
+     "id": 257,
+     "name": "Holy",
+     "slug": "holy",
+     "role": "healer"
+    },
+    "realm": {
+     "name": "Draenor",
+     "slug": "draenor"
+    },
+    "region": {
+     "name": "Europe",
+     "short_name": "EU",
+     "slug": "eu"
+    },
+    "faction": "horde"
+   },
+   "role": "healer",
+   "guild": null,
+   "items": {
+    "item_level_equipped": 248.0,
+    "items": {
+     "head": {
+      "item_id": 271517,
+      "item_level": 250,
+      "name": "Tassels of the Monkey King",
+      "item_quality": 4,
+      "icon": "inv_helm_leather",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": [],
+      "tier": "36"
+     },
+     "mainhand": {
+      "item_id": 268215,
+      "item_level": 250,
+      "name": "Abyssal Broodfiend's Bardiche",
+      "item_quality": 4,
+      "icon": "inv_polearm",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "finger1": {
+      "item_id": 240949,
+      "item_level": 250,
+      "name": "Masterwork Sin'dorei Band",
+      "item_quality": 4,
+      "icon": "inv_ring",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "trinket1": {
+      "item_id": 251136,
+      "item_level": 250,
+      "name": "Signet of Snarling Servitude",
+      "item_quality": 4,
+      "icon": "inv_trinket",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     }
+    }
+   },
+   "ranks": {
+    "score": 3500.0
+   }
+  },
+  {
+   "character": {
+    "name": "Tankbob",
+    "class": {
+     "name": "Paladin",
+     "slug": "paladin"
+    },
+    "spec": {
+     "id": 66,
+     "name": "Protection",
+     "slug": "protection",
+     "role": "tank"
+    },
+    "realm": {
+     "name": "Draenor",
+     "slug": "draenor"
+    },
+    "region": {
+     "name": "Europe",
+     "short_name": "EU",
+     "slug": "eu"
+    },
+    "faction": "horde"
+   },
+   "role": "tank",
+   "guild": null,
+   "items": {
+    "item_level_equipped": 249.0,
+    "items": {
+     "head": {
+      "item_id": 271517,
+      "item_level": 250,
+      "name": "Tassels of the Monkey King",
+      "item_quality": 4,
+      "icon": "inv_helm_leather",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": [],
+      "tier": "36"
+     },
+     "mainhand": {
+      "item_id": 268215,
+      "item_level": 250,
+      "name": "Abyssal Broodfiend's Bardiche",
+      "item_quality": 4,
+      "icon": "inv_polearm",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "finger1": {
+      "item_id": 240949,
+      "item_level": 250,
+      "name": "Masterwork Sin'dorei Band",
+      "item_quality": 4,
+      "icon": "inv_ring",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "trinket1": {
+      "item_id": 251136,
+      "item_level": 250,
+      "name": "Signet of Snarling Servitude",
+      "item_quality": 4,
+      "icon": "inv_trinket",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     }
+    }
+   },
+   "ranks": {
+    "score": 3300.0
+   }
+  },
+  {
+   "character": {
+    "name": "Dpsone",
+    "class": {
+     "name": "Death Knight",
+     "slug": "death-knight"
+    },
+    "spec": {
+     "id": 251,
+     "name": "Frost",
+     "slug": "frost",
+     "role": "dps"
+    },
+    "realm": {
+     "name": "Ravencrest",
+     "slug": "ravencrest"
+    },
+    "region": {
+     "name": "Europe",
+     "short_name": "EU",
+     "slug": "eu"
+    },
+    "faction": "horde"
+   },
+   "role": "dps",
+   "guild": null,
+   "items": {
+    "item_level_equipped": 247.0,
+    "items": {
+     "head": {
+      "item_id": 271517,
+      "item_level": 250,
+      "name": "Tassels of the Monkey King",
+      "item_quality": 4,
+      "icon": "inv_helm_leather",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": [],
+      "tier": "36"
+     },
+     "mainhand": {
+      "item_id": 268215,
+      "item_level": 250,
+      "name": "Abyssal Broodfiend's Bardiche",
+      "item_quality": 4,
+      "icon": "inv_polearm",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "finger1": {
+      "item_id": 240949,
+      "item_level": 250,
+      "name": "Masterwork Sin'dorei Band",
+      "item_quality": 4,
+      "icon": "inv_ring",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "trinket1": {
+      "item_id": 251136,
+      "item_level": 250,
+      "name": "Signet of Snarling Servitude",
+      "item_quality": 4,
+      "icon": "inv_trinket",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     }
+    }
+   },
+   "ranks": {
+    "score": 3200.0
+   }
+  },
+  {
+   "character": {
+    "name": "Lastdps",
+    "class": {
+     "name": "Warlock",
+     "slug": "warlock"
+    },
+    "spec": {
+     "id": 265,
+     "name": "Affliction",
+     "slug": "affliction",
+     "role": "dps"
+    },
+    "realm": {
+     "name": "Ravencrest",
+     "slug": "ravencrest"
+    },
+    "region": {
+     "name": "Europe",
+     "short_name": "EU",
+     "slug": "eu"
+    },
+    "faction": "horde"
+   },
+   "role": "dps",
+   "guild": null,
+   "items": {
+    "item_level_equipped": 246.0,
+    "items": {
+     "head": {
+      "item_id": 271517,
+      "item_level": 250,
+      "name": "Tassels of the Monkey King",
+      "item_quality": 4,
+      "icon": "inv_helm_leather",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": [],
+      "tier": "36"
+     },
+     "mainhand": {
+      "item_id": 268215,
+      "item_level": 250,
+      "name": "Abyssal Broodfiend's Bardiche",
+      "item_quality": 4,
+      "icon": "inv_polearm",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "finger1": {
+      "item_id": 240949,
+      "item_level": 250,
+      "name": "Masterwork Sin'dorei Band",
+      "item_quality": 4,
+      "icon": "inv_ring",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     },
+     "trinket1": {
+      "item_id": 251136,
+      "item_level": 250,
+      "name": "Signet of Snarling Servitude",
+      "item_quality": 4,
+      "icon": "inv_trinket",
+      "bonuses": [],
+      "gems": [],
+      "gems_detail": [],
+      "enchants": [],
+      "enchants_detail": []
+     }
+    }
+   },
+   "ranks": {
+    "score": 3100.0
+   }
+  }
+ ],
+ "keystone_run_id": 9002,
+ "mythic_level": 20,
+ "clear_time_ms": 1650000,
+ "keystone_time_ms": 1980000,
+ "completed_at": "2026-09-09T10:00:00Z",
+ "score": 490.1,
+ "dungeon": {
+  "name": "The Stonevault",
+  "short_name": "SV",
+  "slug": "the-stonevault"
+ }
+}

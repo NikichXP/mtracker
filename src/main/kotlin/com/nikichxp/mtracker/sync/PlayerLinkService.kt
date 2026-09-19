@@ -1,8 +1,8 @@
 package com.nikichxp.mtracker.sync
 
-import com.nikichxp.mtracker.domain.Player
-import com.nikichxp.mtracker.domain.PlayerRepository
-import com.nikichxp.mtracker.domain.TrackedPlayerRepository
+import com.nikichxp.mtracker.domain.player.Player
+import com.nikichxp.mtracker.domain.player.PlayerRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedPlayerRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

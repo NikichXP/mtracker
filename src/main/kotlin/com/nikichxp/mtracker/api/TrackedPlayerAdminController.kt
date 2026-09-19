@@ -1,7 +1,7 @@
 package com.nikichxp.mtracker.api
 
-import com.nikichxp.mtracker.domain.TrackedPlayer
-import com.nikichxp.mtracker.domain.TrackedPlayerRepository
+import com.nikichxp.mtracker.domain.tracking.TrackedPlayer
+import com.nikichxp.mtracker.domain.tracking.TrackedPlayerRepository
 import com.nikichxp.mtracker.web.dto.TrackedPlayerDto
 import com.nikichxp.mtracker.web.dto.TrackedPlayerRequest
 import org.springframework.http.HttpStatus
@@ -41,11 +41,10 @@ class TrackedPlayerAdminController(private val repository: TrackedPlayerReposito
     fun update(@PathVariable id: Long, @RequestBody request: TrackedPlayerRequest): TrackedPlayerDto {
         val existing = findOrThrow(id)
         val (displayName, characterKeys) = validated(request)
-        return toDto(
-            repository.save(
-                existing.copy(displayName = displayName, characterKeys = characterKeys, isFriend = request.isFriend),
-            ),
-        )
+        existing.displayName = displayName
+        existing.characterKeys = characterKeys
+        existing.isFriend = request.isFriend
+        return toDto(repository.save(existing))
     }
 
     @DeleteMapping("/{id}")

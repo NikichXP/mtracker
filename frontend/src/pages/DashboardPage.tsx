@@ -1,12 +1,9 @@
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import CastleIcon from "@mui/icons-material/Castle";
+import { AppHeader } from "../components/AppHeader";
 import { OverviewTab } from "../components/OverviewTab";
 import { WeeklyTab } from "../components/WeeklyTab";
 
@@ -17,19 +14,7 @@ export function DashboardPage() {
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-      <AppBar
-        position="sticky"
-        color="transparent"
-        elevation={0}
-        sx={{ borderBottom: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(6px)" }}
-      >
-        <Toolbar sx={{ gap: 1 }}>
-          <CastleIcon sx={{ mr: { xs: 0.5, sm: 1.5 } }} color="primary" />
-          <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
-            Mtracker — M+ Tracker
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <AppHeader />
 
       <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 3 } }}>
         <Tabs

@@ -85,3 +85,97 @@ export interface RecentRunDto {
   url: string | null;
   roster: RunRosterMemberDto[];
 }
+
+/** Mirrors `com.nikichxp.mtracker.domain.topgear.GearSource`. */
+export type GearSource = "CRAFTED" | "RAID" | "KEYS" | "SET" | "VENDOR" | "QUEST" | "PVP" | "WORLD" | "UNKNOWN";
+
+/** Mirrors `com.nikichxp.mtracker.domain.topgear.StatType`. */
+export type StatType =
+  | "STRENGTH"
+  | "AGILITY"
+  | "INTELLECT"
+  | "STAMINA"
+  | "CRITICAL_STRIKE"
+  | "HASTE"
+  | "MASTERY"
+  | "VERSATILITY"
+  | "SPEED"
+  | "LEECH"
+  | "AVOIDANCE"
+  | "ARMOR";
+
+/** Row of `/api/v1/gearscope/specs`: aggregate parse stats for one spec across all stored top-player gear snapshots. */
+export interface SpecOverviewDto {
+  specId: number;
+  specName: string;
+  specSlug: string;
+  className: string;
+  role: string;
+  parseCount: number;
+  characterCount: number;
+  avgItemLevel: number | null;
+}
+
+export interface GearItemUsageDto {
+  itemId: number;
+  itemName: string | null;
+  icon: string | null;
+  source: GearSource;
+  sourceDetail: string | null;
+  usageCount: number;
+  usageShare: number;
+  avgItemLevel: number | null;
+  stats: Partial<Record<StatType, number>>;
+  topGems: string[];
+  topEnchant: string | null;
+}
+
+export interface SlotReportDto {
+  slot: string;
+  topItems: GearItemUsageDto[];
+}
+
+/** Response of `/api/v1/gearscope/specs/{id}/items`: up to top-N items per slot. */
+export interface SpecGearReportDto {
+  specId: number;
+  specName: string;
+  specSlug: string;
+  className: string;
+  role: string;
+  parseCount: number;
+  characterCount: number;
+  slots: SlotReportDto[];
+}
+
+export interface SlotPickDto {
+  slot: string;
+  item: GearItemUsageDto;
+}
+
+export interface TalentUsageDto {
+  importString: string;
+  usageCount: number;
+}
+
+export interface PartySpecUsageDto {
+  specId: number;
+  specName: string;
+  className: string;
+  role: string;
+  count: number;
+}
+
+/** Response of `/api/v1/gearscope/specs/{id}/summary`: the "what people wear" best-in-slot overview. */
+export interface SpecSummaryDto {
+  specId: number;
+  specName: string;
+  className: string;
+  role: string;
+  parseCount: number;
+  characterCount: number;
+  slots: SlotPickDto[];
+  sourceBreakdown: Partial<Record<GearSource, number>>;
+  avgStats: Partial<Record<StatType, number>>;
+  topTalentImportStrings: TalentUsageDto[];
+  topPartySpecs: PartySpecUsageDto[];
+}

@@ -57,7 +57,6 @@ mtracker:
     min-pages-per-class: ${MTRACKER_TOP_GEAR_MIN_PAGES_PER_CLASS:10}
     top-items-per-slot: ${MTRACKER_TOP_GEAR_TOP_ITEMS_PER_SLOT:5}
     producer-interval-hours: ${MTRACKER_TOP_GEAR_PRODUCER_INTERVAL_HOURS:24}
-    scan-poll-interval-ms: ${MTRACKER_TOP_GEAR_SCAN_POLL_INTERVAL_MS:30000}
     scan-batch-size: ${MTRACKER_TOP_GEAR_SCAN_BATCH_SIZE:20}
     max-runs-per-character: ${MTRACKER_TOP_GEAR_MAX_RUNS_PER_CHARACTER:8}
     max-scan-attempts: ${MTRACKER_TOP_GEAR_MAX_SCAN_ATTEMPTS:3}

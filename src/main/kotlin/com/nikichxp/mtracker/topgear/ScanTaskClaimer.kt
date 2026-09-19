@@ -1,6 +1,7 @@
 package com.nikichxp.mtracker.topgear
 
 import com.nikichxp.mtracker.config.MtrackerProperties
+import com.nikichxp.mtracker.config.WorkerIdentity
 import com.nikichxp.mtracker.domain.topgear.GearSnapshot
 import com.nikichxp.mtracker.domain.topgear.GearSnapshotRepository
 import com.nikichxp.mtracker.domain.topgear.TopPlayerScanTask
@@ -12,20 +13,19 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
-import java.net.InetAddress
 import java.time.Instant
-import java.util.UUID
 
 @Component
 class ScanTaskClaimer(
     private val taskRepository: TopPlayerScanTaskRepository,
     private val snapshotRepository: GearSnapshotRepository,
     private val props: MtrackerProperties,
+    workerIdentity: WorkerIdentity,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    val instanceId: String = resolveInstanceId()
+    val instanceId: String = workerIdentity.id
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     fun claim(task: TopPlayerScanTask): TopPlayerScanTask? {
@@ -79,18 +79,6 @@ class ScanTaskClaimer(
             true
         } catch (e: DataIntegrityViolationException) {
             false
-        }
-    }
-
-    private fun resolveInstanceId(): String {
-        val fromEnv = System.getenv("HOSTNAME")
-        if (!fromEnv.isNullOrBlank()) {
-            return fromEnv
-        }
-        return try {
-            InetAddress.getLocalHost().hostName
-        } catch (e: Exception) {
-            "instance-${UUID.randomUUID()}"
         }
     }
 }

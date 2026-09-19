@@ -103,7 +103,7 @@ class TopGearScanService(
             val memberRealmSlug = character.realm?.slug ?: continue
             val memberKey = "$name-$memberRealmSlug"
             val isTaskCharacter = name.equals(task.name, ignoreCase = true) &&
-                memberRealmSlug.equals(task.realmSlug, ignoreCase = true)
+                    memberRealmSlug.equals(task.realmSlug, ignoreCase = true)
             val memberTask = if (isTaskCharacter) {
                 task
             } else {

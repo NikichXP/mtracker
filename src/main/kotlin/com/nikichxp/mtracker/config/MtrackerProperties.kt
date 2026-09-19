@@ -14,11 +14,8 @@ data class MtrackerProperties(
 ) {
 
     data class Sync(
-        /** Interval between full syncs (roster rebuild + due player updates). */
         val intervalHours: Long = 6,
-        /** How often the scheduler polls for players whose nextUpdateAt is due. */
         val pollIntervalMs: Long = 60_000,
-        /** How many due players are fetched per batch while draining the update queue. */
         val batchSize: Int = 10,
         val defaultDelay: Long = 100,
         val requestDelay: Map<String, Long> = emptyMap()
@@ -43,7 +40,7 @@ data class MtrackerProperties(
         val minPagesPerClass: Int = 10,
         val topItemsPerSlot: Int = 5,
         val producerIntervalHours: Long = 24,
-        val scanPollIntervalMs: Long = 30_000,
+        val lockStaleMinutes: Long = 15,
         val scanBatchSize: Int = 20,
         val maxRunsPerCharacter: Int = 8,
         val maxScanAttempts: Int = 3,

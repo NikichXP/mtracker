@@ -22,7 +22,7 @@ export function GearScopePage() {
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
       <AppHeader />
 
-      <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 3 } }}>
+      <Container maxWidth={false} sx={{ py: { xs: 2, sm: 4 }, px: { xs: 2, sm: "6%", md: "10%" } }}>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
           GearScope
         </Typography>

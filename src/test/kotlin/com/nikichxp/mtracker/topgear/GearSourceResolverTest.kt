@@ -30,7 +30,7 @@ class GearSourceResolverTest {
     ) = WowheadItemDto(1, "item", 4, "icon", "Head", sourceIds, droppedBy, zoneId)
 
     private fun raidEncounters() = RaidingStaticDataDto(
-        listOf(StaticRaidDto(encounters = listOf(NamedSlugDto(name = "Ula'tek"))))
+        listOf(StaticRaidDto(name = "Liberation of Undermine", encounters = listOf(NamedSlugDto(name = "Ula'tek"))))
     )
 
     @Test
@@ -71,5 +71,21 @@ class GearSourceResolverTest {
     @Test
     fun `no source data resolves to UNKNOWN`() = runBlocking<Unit> {
         assertThat(resolver.classify(wowheadItem())).isEqualTo(GearSource.UNKNOWN)
+    }
+
+    @Test
+    fun `raid source detail includes the raid instance name`() = runBlocking<Unit> {
+        whenever(raiderIoService.fetchRaidingStaticData(any())).thenReturn(raidEncounters())
+        val detail = resolver.sourceDetail(wowheadItem(droppedBy = "Ula'tek"), GearSource.RAID)
+        assertThat(detail).isEqualTo("Ula'tek — Liberation of Undermine")
+    }
+
+    @Test
+    fun `non-raid source detail keeps just the dropped-by text`() = runBlocking<Unit> {
+        val detail = resolver.sourceDetail(
+            wowheadItem(droppedBy = "Xathuux the Annihilator"),
+            GearSource.KEYS,
+        )
+        assertThat(detail).isEqualTo("Xathuux the Annihilator")
     }
 }

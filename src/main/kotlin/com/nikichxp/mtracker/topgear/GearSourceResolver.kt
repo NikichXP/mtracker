@@ -33,8 +33,14 @@ class GearSourceResolver(
         return GearSource.UNKNOWN
     }
 
-    fun sourceDetail(wowheadItem: WowheadItemDto?, source: GearSource): String? {
-        wowheadItem?.droppedBy?.let { return it }
+    suspend fun sourceDetail(wowheadItem: WowheadItemDto?, source: GearSource): String? {
+        wowheadItem?.droppedBy?.let { droppedBy ->
+            if (source == GearSource.RAID) {
+                val raidName = raidEncounterCatalog.raidNameFor(droppedBy)
+                return if (!raidName.isNullOrBlank()) "$droppedBy — $raidName" else droppedBy
+            }
+            return droppedBy
+        }
         if (source == GearSource.CRAFTED) {
             return "crafted"
         }

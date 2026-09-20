@@ -20,9 +20,15 @@ export function BestInSlotGrid({ slots }: Props) {
   const ordered = sortSlots(slots, (pick) => pick.slot);
 
   return (
-    <Box sx={{ display: "grid", gap: 1.5, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" } }}>
+    <Box
+      sx={{
+        display: "grid",
+        gap: 1.5,
+        gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" },
+      }}
+    >
       {ordered.map((pick) => (
-        <Box key={pick.slot}>
+        <Box key={pick.slot} sx={{ minWidth: 0 }}>
           <Typography
             variant="caption"
             color="text.secondary"

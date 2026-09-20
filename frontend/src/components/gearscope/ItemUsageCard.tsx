@@ -14,7 +14,7 @@ interface Props {
 export function ItemUsageCard({ item }: Props) {
   const source = gearSourceVisual(item.source);
   const stats = sortedStatEntries(item.stats);
-  const extras = [...item.topGems, item.topEnchant].filter((v): v is string => Boolean(v));
+  const gems = item.topGems.filter((v): v is string => Boolean(v));
 
   return (
     <Box
@@ -25,6 +25,9 @@ export function ItemUsageCard({ item }: Props) {
         borderRadius: 1,
         border: "1px solid rgba(255,255,255,0.08)",
         bgcolor: "rgba(255,255,255,0.02)",
+        minWidth: 0,
+        maxWidth: "100%",
+        boxSizing: "border-box",
       }}
     >
       <Box
@@ -63,9 +66,17 @@ export function ItemUsageCard({ item }: Props) {
             {stats.map(([stat, value]) => `${statLabel(stat)} ${value}`).join(" · ")}
           </Typography>
         )}
-        {extras.length > 0 && (
+        {gems.length > 0 && (
           <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
-            {extras.join(" · ")}
+            {gems.join(" · ")}
+          </Typography>
+        )}
+        {item.topEnchant && (
+          <Typography
+            variant="caption"
+            sx={{ display: "block", color: "#ce93d8", fontWeight: 600 }}
+          >
+            {item.topEnchant}
           </Typography>
         )}
         {item.sourceDetail && (

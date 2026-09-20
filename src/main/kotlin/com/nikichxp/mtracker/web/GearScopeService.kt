@@ -2,6 +2,7 @@ package com.nikichxp.mtracker.web
 
 import com.nikichxp.mtracker.config.MtrackerProperties
 import com.nikichxp.mtracker.domain.topgear.GearItemCatalog
+import com.nikichxp.mtracker.domain.topgear.GearItemStats
 import com.nikichxp.mtracker.domain.topgear.GearItemStatsRepository
 import com.nikichxp.mtracker.domain.topgear.GearItemCatalogRepository
 import com.nikichxp.mtracker.domain.topgear.GearSnapshot
@@ -42,7 +43,8 @@ class GearScopeService(
             return null
         }
         val catalogs = catalogsFor(snapshots)
-        val slots = slotReports(snapshots, catalogs, excludeRaid, limit ?: props.topGear.topItemsPerSlot)
+        val stats = statsFor(snapshots)
+        val slots = slotReports(snapshots, catalogs, stats, excludeRaid, limit ?: props.topGear.topItemsPerSlot)
         val first = snapshots.first()
         return SpecGearReportDto(
             specId = specId,
@@ -62,7 +64,8 @@ class GearScopeService(
             return null
         }
         val catalogs = catalogsFor(snapshots)
-        val slotReports = slotReports(snapshots, catalogs, excludeRaid, 1)
+        val stats = statsFor(snapshots)
+        val slotReports = slotReports(snapshots, catalogs, stats, excludeRaid, 1)
         val visibleItems = snapshots.flatMap { it.items }.filter { include(it, excludeRaid) }
         val first = snapshots.first()
         return SpecSummaryDto(
@@ -102,6 +105,7 @@ class GearScopeService(
     private fun slotReports(
         snapshots: List<GearSnapshot>,
         catalogs: Map<Int, GearItemCatalog>,
+        stats: Map<Pair<Int, String>, GearItemStats>,
         excludeRaid: Boolean,
         limit: Int,
     ): List<SlotReportDto> {
@@ -109,7 +113,7 @@ class GearScopeService(
         return itemsBySlot.map { (slot, items) ->
             val slotSnapshots = snapshots.count { s -> s.items.any { it.slot == slot } }
             val topItems = items.groupBy { it.itemId }
-                .map { (itemId, usages) -> usageDto(itemId, usages, slotSnapshots, catalogs) }
+                .map { (itemId, usages) -> usageDto(itemId, usages, slotSnapshots, catalogs, stats) }
                 .sortedByDescending { it.usageCount }
                 .take(limit)
             SlotReportDto(slot, topItems)
@@ -121,6 +125,7 @@ class GearScopeService(
         usages: List<GearSnapshotItem>,
         slotSnapshots: Int,
         catalogs: Map<Int, GearItemCatalog>,
+        stats: Map<Pair<Int, String>, GearItemStats>,
     ): GearItemUsageDto {
         val catalog = catalogs[itemId]
         val mostCommonBonusKey = usages
@@ -136,7 +141,7 @@ class GearScopeService(
             usageCount = usages.size,
             usageShare = if (slotSnapshots > 0) usages.size.toDouble() / slotSnapshots else 0.0,
             avgItemLevel = usages.map { it.itemLevel }.average(),
-            stats = statsRepository.findByItemIdAndBonusKey(itemId, mostCommonBonusKey)?.stats ?: emptyMap(),
+            stats = stats[itemId to mostCommonBonusKey]?.stats ?: emptyMap(),
             topGems = usages.flatMap { it.gems }
                 .groupingBy { it.gemId }
                 .eachCount()
@@ -156,6 +161,11 @@ class GearScopeService(
     private fun catalogsFor(snapshots: List<GearSnapshot>): Map<Int, GearItemCatalog> {
         val itemIds = snapshots.flatMap { s -> s.items.map { it.itemId } }.distinct()
         return catalogRepository.findAllById(itemIds).associateBy { it.itemId }
+    }
+
+    private fun statsFor(snapshots: List<GearSnapshot>): Map<Pair<Int, String>, GearItemStats> {
+        val itemIds = snapshots.flatMap { s -> s.items.map { it.itemId } }.distinct()
+        return statsRepository.findByItemIdIn(itemIds).associateBy { it.itemId to it.bonusKey }
     }
 
     private fun include(item: GearSnapshotItem, excludeRaid: Boolean): Boolean {

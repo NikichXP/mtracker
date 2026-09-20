@@ -14,6 +14,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 
 @Embeddable
 data class GearSocket(
@@ -47,12 +49,15 @@ class GearSnapshotItem(
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "gear_snapshot_item_bonuses", joinColumns = [JoinColumn(name = "snapshot_item_id")])
     @Column(name = "bonus_id")
+    @Fetch(FetchMode.SUBSELECT)
     var bonusIds: List<Int> = emptyList(),
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "gear_snapshot_item_gems", joinColumns = [JoinColumn(name = "snapshot_item_id")])
+    @Fetch(FetchMode.SUBSELECT)
     var gems: List<GearSocket> = emptyList(),
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "gear_snapshot_item_enchants", joinColumns = [JoinColumn(name = "snapshot_item_id")])
+    @Fetch(FetchMode.SUBSELECT)
     var enchants: List<GearEnchantment> = emptyList(),
 ) {
     // The snapshot back-reference would recurse through data-class equals/hashCode/toString.

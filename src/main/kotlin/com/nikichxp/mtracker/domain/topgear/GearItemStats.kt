@@ -54,4 +54,6 @@ class GearItemStats(
 
 interface GearItemStatsRepository : JpaRepository<GearItemStats, Long> {
     fun findByItemIdAndBonusKey(itemId: Int, bonusKey: String): GearItemStats?
+
+    fun findByItemIdIn(itemIds: Collection<Int>): List<GearItemStats>
 }

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { theme } from "./theme";
 import { DashboardPage } from "./pages/DashboardPage";
-import { GearScopePage } from "./pages/GearScopePage";
+import { TopGearPage } from "./pages/TopGearPage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1 } },
@@ -18,7 +18,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<DashboardPage />} />
-            <Route path="/gearscope" element={<GearScopePage />} />
+            <Route path="/topgear" element={<TopGearPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

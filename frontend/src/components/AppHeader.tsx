@@ -1,19 +1,33 @@
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CastleIcon from "@mui/icons-material/Castle";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "react-router-dom";
+import { API_TARGETS, getApiTargetId, setApiTarget, type ApiTargetId } from "../api/client";
 
 const NAV_ITEMS = [
   { to: "/", label: "Dashboard" },
-  { to: "/gearscope", label: "GearScope" },
+  { to: "/topgear", label: "TopGear" },
 ];
 
-/** Sticky top bar shared by every page, with navigation between the dashboard and GearScope. */
+const IS_LOCALHOST = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
 export function AppHeader() {
   const location = useLocation();
+  const queryClient = useQueryClient();
+  const [apiTarget, setApiTargetState] = useState<ApiTargetId>(getApiTargetId);
+
+  const handleApiTargetChange = (id: ApiTargetId) => {
+    setApiTarget(id);
+    setApiTargetState(id);
+    queryClient.invalidateQueries();
+  };
 
   return (
     <AppBar
@@ -27,7 +41,21 @@ export function AppHeader() {
         <Typography variant="h6" component="div" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
           Mtracker — M+ Tracker
         </Typography>
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          {IS_LOCALHOST && (
+            <Select
+              size="small"
+              value={apiTarget}
+              onChange={(e) => handleApiTargetChange(e.target.value as ApiTargetId)}
+              sx={{ mr: 1, fontSize: "0.8rem" }}
+            >
+              {API_TARGETS.map((t) => (
+                <MenuItem key={t.id} value={t.id}>
+                  API: {t.label}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
           {NAV_ITEMS.map((item) => {
             const active = location.pathname === item.to;
             return (

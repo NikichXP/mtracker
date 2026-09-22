@@ -5,13 +5,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { AppHeader } from "../components/AppHeader";
-import { SpecDetailPanel } from "../components/gearscope/SpecDetailPanel";
-import { SpecListPanel } from "../components/gearscope/SpecListPanel";
+import { SpecDetailPanel } from "../components/topgear/SpecDetailPanel";
+import { SpecListPanel } from "../components/topgear/SpecListPanel";
 import { useSpecOverview } from "../hooks/useSpecOverview";
 
-/** GearScope: what top-ranked EU players actually wear, per spec — sourced from raider.io
- *  mythic+ rankings + run details. Pick a spec on the left to load its gear breakdown. */
-export function GearScopePage() {
+export function TopGearPage() {
   const { data, isLoading, isError } = useSpecOverview();
   const specs = useMemo(() => [...(data ?? [])].sort((a, b) => b.parseCount - a.parseCount), [data]);
   const [selectedSpecId, setSelectedSpecId] = useState<number | null>(null);
@@ -24,7 +22,7 @@ export function GearScopePage() {
 
       <Container maxWidth={false} sx={{ py: { xs: 2, sm: 4 }, px: { xs: 2, sm: "6%", md: "10%" } }}>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          GearScope
+          TopGear
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
           What top-ranked EU players actually wear, per spec.

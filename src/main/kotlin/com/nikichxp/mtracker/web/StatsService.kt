@@ -1,5 +1,6 @@
 package com.nikichxp.mtracker.web
 
+import com.nikichxp.mtracker.config.CacheConfig
 import com.nikichxp.mtracker.domain.character.Character
 import com.nikichxp.mtracker.domain.character.CharacterRepository
 import com.nikichxp.mtracker.domain.player.Player
@@ -16,6 +17,7 @@ import com.nikichxp.mtracker.web.dto.PlayerOverviewDto
 import com.nikichxp.mtracker.web.dto.RecentRunDto
 import com.nikichxp.mtracker.web.dto.RunRosterMemberDto
 import com.nikichxp.mtracker.web.dto.WeeklyPlayerStatsDto
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,6 +31,7 @@ class StatsService(
     private val runPlayerRepository: RunPlayerRepository,
 ) {
 
+    @Cacheable(CacheConfig.STATS_OVERVIEW)
     fun overview(): List<PlayerOverviewDto> {
         val players = playerRepository
             .findByRioScoreGreaterThan(MIN_RIO_THRESHOLD)
